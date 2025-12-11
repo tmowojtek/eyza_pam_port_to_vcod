@@ -464,17 +464,17 @@ addPlayerLine(team, stats)
 		plants = "-";
 		defuses = "-";
 		grenades = "-";
-		if (self.sessionteam == team || self.sessionteam == "spectator" || game["state"] == "intermission") // dont show enemy's info (it might say location of enemy)
+		if (/*self.sessionteam == team ||*/ self.sessionteam == "spectator" || game["state"] == "intermission") // dont show enemy's info (it might say location of enemy)
 		{
 			score = maps\mp\gametypes\global\_global::format_fractional(stats["score"], 1, 1);
 			assists = stats["assists"];
 			adr = maps\mp\gametypes\global\_global::format_fractional(stats["adr"], 1, 1);
 			//logprint("$$$$$$$$$$$$$$$$$$$$$ name=" + name + ", adr=" + adr + "\n");
 
-			grenade_damage = "";
-			if (stats["grenade_damage"] >= 500) grenade_damage = "^3";  // yellow
-			if (stats["grenade_damage"] >= 1000) grenade_damage = "^1"; // red
-			grenade_damage = stats["grenade_damage"];
+			grenade_damage_color = "";
+			if (stats["grenade_damage"] >= 500) grenade_damage_color = "^3";  // yellow
+			if (stats["grenade_damage"] >= 1000) grenade_damage_color = "^1"; // red
+			grenade_damage = grenade_damage_color + stats["grenade_damage"];
 
 			plants = stats["plants"];
 			defuses = stats["defuses"];
