@@ -726,7 +726,8 @@ refresh()
 				if (game["match_exists"])
 					determineTeamByHistoryCvars();
 				else
-					determineTeamByFirstConnected();
+					if (isDefined(game["readyup_first_run_ending_for_matchinfo"]) && game["readyup_first_run_ending_for_matchinfo"])
+						determineTeamByFirstConnected();
 
 				// for all players change team name in scoreboard
 				players = getentarray("player", "classname");

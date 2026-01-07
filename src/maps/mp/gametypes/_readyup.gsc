@@ -80,6 +80,7 @@ init()
 	{
 		game["Do_Ready_up"] = false;		// request from other scripts to run readyup
 		game["readyup_first_run"] = level.scr_readyup;
+		game["readyup_first_run_ending_for_matchinfo"] = false;
 	}
 
 	// Start readyup if is request (halftime, timeout, overtime) or is enabled by cvar on fresh start
@@ -870,13 +871,16 @@ End_Readyup_Mode()
 	thread HUD_Half_Start(level.scr_readyup_start_timer);
 
     // Coomon lets got that bastartdss blaballa
-    thread playStartSound();
+    // thread playStartSound();
+
+	game["readyup_first_run_ending_for_matchinfo"] = true;
 
 
 	wait level.fps_multiplier * level.scr_readyup_start_timer; // (10sec)
 
 	// reset flag as readyup was runned
 	game["readyup_first_run"] = false;
+	game["readyup_first_run_ending_for_matchinfo"] = false;
 
 	if (!level.in_timeout)
 	{

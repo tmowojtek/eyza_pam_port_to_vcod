@@ -467,7 +467,7 @@ addPlayerLine(team, stats)
 		if (/*self.sessionteam == team ||*/ self.sessionteam == "spectator" || game["state"] == "intermission") // dont show enemy's info (it might say location of enemy)
 		{
 			score = maps\mp\gametypes\global\_global::format_fractional(stats["score"], 1, 1);
-			assists = stats["assists"];
+			// assists = stats["assists"];
 			adr = maps\mp\gametypes\global\_global::format_fractional(stats["adr"], 1, 1);
 			//logprint("$$$$$$$$$$$$$$$$$$$$$ name=" + name + ", adr=" + adr + "\n");
 
@@ -483,7 +483,7 @@ addPlayerLine(team, stats)
 
 
 		//logprint("addLine with player stats: " + name + " " + score + " etc...\n");
-		addLine(stats, name, color + score, color + stats["kills"], color + stats["deaths"], color + assists, color + adr, color + grenade_damage, color + grenades, color + plants, color + defuses);
+		addLine(stats, name, color + score, color + stats["kills"], color + stats["deaths"], color + stats["assists"], color + adr, color + grenade_damage, color + grenades, color + plants, color + defuses);
 
 		// Debug
 		//addLine(player.name, 48, 32, 18, 4, 3.7, 2, 0);
