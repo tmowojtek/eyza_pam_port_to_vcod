@@ -793,7 +793,7 @@ onPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHit
 	if(!isdefined(self.switching_teams))
 	{
 		// Player's stats - increase kill points (_player_stat.gsc)
-		if (!level.in_readyup && level.roundstarted && !level.roundended)
+		if (!level.in_readyup /*&& level.roundstarted && !level.roundended*/)
 		{
 			self maps\mp\gametypes\_player_stat::AddDeath();
 			self maps\mp\gametypes\_player_stat::CalculateAdr();
@@ -807,7 +807,7 @@ onPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHit
 		if(self.pers["team"] == attacker.pers["team"]) // killed by a friendly
 		{
 			// Player's stats - decrease score points (_player_stat.gsc)
-			if (!level.in_readyup && level.roundstarted && !level.roundended)
+			if (!level.in_readyup /*&& level.roundstarted && !level.roundended*/)
 			{
 				attacker maps\mp\gametypes\_player_stat::AddScore(-1);
 				attacker maps\mp\gametypes\_player_stat::AddTeamKill();
@@ -818,7 +818,7 @@ onPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHit
 		else
 		{
 			// Player's stats - increase kill points (_player_stat.gsc)
-			if (!level.in_readyup && level.roundstarted && !level.roundended)
+			if (!level.in_readyup /*&& level.roundstarted && !level.roundended*/)
 			{
 				attacker maps\mp\gametypes\_player_stat::AddKill();
 				attacker maps\mp\gametypes\_player_stat::AddScore(1);
@@ -833,7 +833,7 @@ onPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHit
 		}
 	} else {
 		// self kill or killed by world (explosion or fall damage)
-		if (!level.in_readyup && level.roundstarted && !level.roundended)
+		if (!level.in_readyup /*&& level.roundstarted && !level.roundended*/)
 		{
 			// self kill or killed by world (explosion or fall damage)
 			self maps\mp\gametypes\_player_stat::AddScore(-1);
@@ -845,7 +845,7 @@ onPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHit
 	// For assists
 	if (isDefined(self.lastAttacker) && self.lastAttacker != attacker && self.pers["team"] != self.lastAttacker.pers["team"])
 	{
-		if (!level.in_readyup && level.roundstarted && !level.roundended)
+		if (!level.in_readyup /*&& level.roundstarted && !level.roundended*/)
 		{
 			self.lastAttacker thread maps\mp\gametypes\_damagefeedback::updateAssistsFeedback();
 
@@ -871,7 +871,7 @@ onAfterPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir,
 	obituary(self, attacker, sWeapon, sMeansOfDeath);
 
 	// Weapon/Nade Drops
-	if (!isDefined(self.switching_teams) && level.roundstarted && !level.roundended)
+	if (!isDefined(self.switching_teams) /*&& level.roundstarted && !level.roundended*/)
 		self thread maps\mp\gametypes\_weapons::dropWeapons();
 
 
@@ -1035,7 +1035,35 @@ spawnPlayer()
 	spawnpoint = maps\mp\gametypes\_spawnlogic::getSpawnpoint_Random(spawnpoints);
 
 	if(isdefined(spawnpoint))
-		self spawn(spawnpoint.origin, spawnpoint.angles);
+	{
+		logprint("isDefined(game[restoreLastSpawnpoint])=" + isDefined(game["restoreLastSpawnpoint"]) + "\n");
+		if (isDefined(game["restoreLastSpawnpoint"]))
+			logprint("_spawnPlayer:: game[restoreLastSpawnpoint]=" + game["restoreLastSpawnpoint"] + "\n");
+		
+		if (isDefined(game["restoreLastSpawnpoint"]) && game["restoreLastSpawnpoint"])
+		{
+			if (isDefined(self.pers["lastSpawnpointOrigin"]) && isDefined(self.pers["lastSpawnpointAngles"]))
+			{
+				logprint("newSpawnpointLogic#1\n");
+				self spawn(self.pers["lastSpawnpointOrigin"], self.pers["lastSpawnpointAngles"]);
+			}
+			else
+			{
+				logprint("newSpawnpointLogic#2\n");
+				self spawn(spawnpoint.origin, spawnpoint.angles);
+				self.pers["lastSpawnpointOrigin"] = spawnpoint.origin;
+				self.pers["lastSpawnpointAngles"] = spawnpoint.angles;
+			}
+		}
+		else
+		{
+			logprint("newSpawnpointLogic#3\n");
+			self spawn(spawnpoint.origin, spawnpoint.angles);
+			self.pers["lastSpawnpointOrigin"] = spawnpoint.origin;
+			self.pers["lastSpawnpointAngles"] = spawnpoint.angles;
+		}
+		logprint(self.name + " lastSpawnpointOrigin=" + self.pers["lastSpawnpointOrigin"] + ", lastSpawnpointAngles=" + self.pers["lastSpawnpointAngles"] + "\n");
+	}
 	else
 		maps\mp\_utility::error("NO " + spawnpointname + " SPAWNPOINTS IN MAP");
 
@@ -1331,6 +1359,8 @@ startRound()
 
 	// Round started
 	level.roundstarted = true;
+	game["restoreLastSpawnpoint"] = false;
+	logprint("_startRound:: game[restoreLastSpawnpoint]=" + game["restoreLastSpawnpoint"] + "\n");
 
 
 
@@ -1872,6 +1902,9 @@ endRound(roundwinner)
 
 		player unlink();
 		player enableWeapon();
+
+		player.pers["lastSpawnpointOrigin"] = undefined;
+		player.pers["lastSpawnpointAngles"] = undefined;
 	}
 
 	//logprint("_sd::endRound after remove plant related hud\n");

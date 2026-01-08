@@ -387,7 +387,8 @@ Start_Timeout_Mode(runned_in_middle_of_game)
 	time_elapsed = gettime() - time_start;
 	level.timeout_elapsedTime += time_elapsed / 1000;
 
-
+	game["restoreLastSpawnpoint"] = true;
+	logprint("_timeout:: game[restoreLastSpawnpoint]=" + game["restoreLastSpawnpoint"] + "\n");
 
 	level notify("timeoutover");
 
