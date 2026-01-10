@@ -4,7 +4,7 @@
 //	This script provides the hooks from code into script for the gametype callback functions.
 
 /*
-	Order of loading scripts:
+1	Order of loading scripts:
 
 		1. Init game cvars:
 			\fs_game\PAM2016\g_antilag\1\g_gametype\sd\gamename\Call of Duty 2\mapname\mp_toujane\protocol\118\shortversion\1.3\sv_allowAnonymous\0\sv_floodProtect\1\sv_hostname\CoD2Host\sv_maxclients\20\sv_maxPing\0\sv_maxRate\0\sv_minPing\0\sv_privateClients\0\sv_punkbuster\0\sv_pure\1\sv_voice\0

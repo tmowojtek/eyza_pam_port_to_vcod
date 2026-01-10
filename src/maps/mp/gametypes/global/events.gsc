@@ -1,4 +1,4 @@
-/*
+/* 1
 This script implements new event system
 Basicly script that need do some action based on some event will register function for that event
 and if event happends, that function is called

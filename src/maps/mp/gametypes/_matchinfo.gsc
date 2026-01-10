@@ -1,6 +1,6 @@
 /*
   rPAMext Version: v19 (kvcodPAM v2.10)     
-
+1
   Changes:
 
   - rFIX_HLSW-CVAR-PLAYER-ERROR : Executing this code when joining a server causes an error (Global server cvars visible via HLSW).
