@@ -31,10 +31,10 @@ onStartGameType()
 onCvarChanged(cvar, value, isRegisterTime)
 {
 	// Server info update
-	if (!isRegisterTime && !game["firstInit"] && !isDefined(game["cvars"][cvar]["inQuiet"]) && cvar != "pam_mode_custom")
-	{
-		thread generateGlobalServerInfo();
-	}
+	// if (!isRegisterTime && !game["firstInit"] && !isDefined(game["cvars"][cvar]["inQuiet"]) && cvar != "pam_mode_custom")
+	// {
+	// 	thread generateGlobalServerInfo();
+	// }
 
 	switch(cvar)
 	{

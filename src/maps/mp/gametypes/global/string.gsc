@@ -185,6 +185,31 @@ formatTime(timeSec, separator, printSeconds)
 	return str;
 }
 
+formatTimeRoundReport(timeSec, separator, printSeconds)
+{
+	if (!isDefined(separator)) separator = ":";
+	if (!isDefined(printSeconds)) printSeconds = true;
+	timeSec = (int)(timeSec); // to avoid unmatching types 'float' and 'int'
+	str = "";
+	min = (int)(timeSec / 60);
+	hour = (int)(min / 60);
+	sec = timeSec % 60;
+	if (hour > 0)
+	{
+		if (hour < 10) hour = "0" + hour;
+		min = min % 60;
+		str += hour + separator;
+	}
+	if (min < 10) min = "0" + min;
+	if (sec < 10) sec = "0" + sec;
+
+	str += min;
+	if (printSeconds)
+		str += separator + sec;
+
+	return str;
+}
+
 // Add char 's' to the end of the string if num is > 1
 plural_s(num, text)
 {

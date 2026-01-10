@@ -3,7 +3,7 @@
 Load()
 {
 	game["rules_leagueString"] = &"Search and Destroy";
-	game["rules_formatString"] = &"Classic"; // default
+	game["rules_formatString"] = &"MR12"; // default
 
 	game["ruleCvars"] = GetCvars(game["ruleCvars"]);
 }
@@ -12,10 +12,10 @@ GetCvars(arr)
 {
 	// Match Style
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_timelimit", 0);		// Time limit for map. 0=disabled (minutes)
-	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_half_round", 10);	// Number of rounds when half-time starts. 0=ignored
+	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_half_round", 12);	// Number of rounds when half-time starts. 0=ignored
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_half_score", 0);	// Number of score when half-time starts. 0=ignored
-	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_end_round", 20);	// Number of rounds when map ends. 0=ignored
-	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_end_score", 0);	// Number of score when map ends. 0=ignored
+	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_end_round", 24);	// Number of rounds when map ends. 0=ignored
+	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_end_score", 13);	// Number of score when map ends. 0=ignored
 
 	// Round options
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_strat_time", 10);	// Time before round starts where players cannot move
@@ -32,7 +32,7 @@ GetCvars(arr)
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_plant_points", 0.5);
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_defuse_points", 0.5);
 
-	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_sniper_shotgun_info", 1);	// Show weapon info about sniper and shotgun players
+	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_sniper_shotgun_info", 0);	// Show weapon info about sniper and shotgun players
 
 
 
@@ -50,11 +50,11 @@ GetCvars(arr)
 	// Time-out
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_timeouts", 4);			// Total timeouts for one team
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_timeouts_half", 2); 		// How many per side
-	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_timeout_length", 2); 		// Length in minutes
+	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_timeout_length", 5); 		// Length in minutes
 
 
 	// Are there OT Rules?
-	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_overtime", 0);
+	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_overtime", 1);
 
 	// OT Rules - MR3 format
   	if (isDefined(game["overtime_active"]) && game["overtime_active"])
@@ -70,7 +70,7 @@ GetCvars(arr)
 		// Time-out
 		arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_timeouts", 2);			// Total timeouts for one team
 		arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_timeouts_half", 1); 		// How many per side
-		arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_timeout_length", 1); 		// Length in minutes
+		arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_timeout_length", 5); 		// Length in minutes
 	}
 
 
@@ -80,7 +80,7 @@ GetCvars(arr)
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_show_objective_icons", 0);
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_show_hitblip", 1);
 
-	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_show_scoreboard", 1); 		//Score in the upper left corner [0 - 1] 0=hided  1=visible  (if 1, score can be still hided by player settings)
+	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_show_scoreboard", 0); 		//Score in the upper left corner [0 - 1] 0=hided  1=visible  (if 1, score can be still hided by player settings)
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_show_scoreboard_limit", 0);
 
 	// Health Regeneration
@@ -96,7 +96,7 @@ GetCvars(arr)
 
 
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_allow_shellshock", 0);					// Create shell shock effect when player is hitted
-	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_replace_russian", 1); 					// Replace russians with Americans / Brisith
+	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_replace_russian", 0); 					// Replace russians with Americans / Brisith
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_blackout", 1); 						// If match is in progress, show map background all over the screen and disable sounds for connected player
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_recording", 0); 						// Starts automatically recording when match starts
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_matchinfo", 2); 						// Show match info in menu (1 = without team names, 2 = with team names)
@@ -130,6 +130,7 @@ GetCvars(arr)
 	//arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_hitbox_hand_fix", 0);				// Damage to left hand is adjusted for rifles and scopes.
 	//arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_hitbox_torso_fix", 0);					// Damage of M1, rifles, scopes and shotgun is adjusted to have less hits in game
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_rpam_aimrun_fix", 1);
+	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_rpam_fastshoot_msg", 0);
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_killcam", 0);					// Killcam
 
 
@@ -177,7 +178,7 @@ GetCvars(arr)
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_allow_smoke_drop", 0);
 
 	// Player's weapon drop
-	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_allow_primary_drop", 1);
+	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_allow_primary_drop", 0);
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_allow_secondary_drop", 1);
 
 	// Allow/Disallow Weapons

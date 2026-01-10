@@ -1,24 +1,24 @@
 
 
-/*
 main()
 {
 	logprint("strat::init\n");
 	
 	// Initialize global systems (scripts for events, cvars, hud, player...)
-	InitSystems();
+	maps\mp\gametypes\global\_global::InitSystems();
 
+	varAEL = maps\mp\gametypes\global\_global::addEventListener;
 
 	// Register events that should be caught
-	addEventListener("onStartGameType", ::onStartGameType);
-	addEventListener("onConnecting", ::onConnecting);
-	addEventListener("onConnected", ::onConnected);
-	addEventListener("onDisconnect", ::onDisconnect);
-	addEventListener("onPlayerDamaging", ::onPlayerDamaging);
-	addEventListener("onPlayerDamaged", ::onPlayerDamaged);
-	addEventListener("onPlayerKilling", ::onPlayerKilling);
-	addEventListener("onPlayerKilled", ::onPlayerKilled);
-	addEventListener("onMenuResponse",  ::onMenuResponse);
+	[[varAEL]]("onStartGameType", ::onStartGameType);
+	[[varAEL]]("onConnecting", ::onConnecting);
+	[[varAEL]]("onConnected", ::onConnected);
+	[[varAEL]]("onDisconnect", ::onDisconnect);
+	[[varAEL]]("onPlayerDamaging", ::onPlayerDamaging);
+	[[varAEL]]("onPlayerDamaged", ::onPlayerDamaged);
+	[[varAEL]]("onPlayerKilling", ::onPlayerKilling);
+	[[varAEL]]("onPlayerKilled", ::onPlayerKilled);
+	[[varAEL]]("onMenuResponse",  ::onMenuResponse);
 
 	// Events for this gametype that are called last after all events are processed
 	level.onAfterConnected = ::onAfterConnected;
@@ -42,29 +42,25 @@ main()
 		precache();
 
 	// Init all shared modules in this pam (scripts with underscore)
-	InitModules();
+	maps\mp\gametypes\global\_global::InitModules();
 }
-*/
 
 // Precache specific stuff for this gametype
 // Is called only once per map
-/*
 precache()
 {
-	precacheStatusIcon("compassping_enemyfiring"); // for streamers
+	//precacheStatusIcon("compassping_enemyfiring"); // for streamers
 
-	precacheString2("STRING_FLY_ENABLED", &"Enabled");
-	precacheString2("STRING_FLY_DISABLED", &"Disabled");
-	precacheString2("STRING_ENABLE_HOLD_SHIFT", &"Enable: Hold ^3Bash");
-	precacheString2("STRING_DISABLE_HOLD_SHIFT", &"Disable: Hold ^3Bash");
-	precacheString2("STRING_GRENADE_EXPLODES_IN", &"Grenade explodes in");
+	maps\mp\gametypes\global\_global::precacheString2("STRING_FLY_ENABLED", &"Enabled");
+	maps\mp\gametypes\global\_global::precacheString2("STRING_FLY_DISABLED", &"Disabled");
+	maps\mp\gametypes\global\_global::precacheString2("STRING_ENABLE_HOLD_SHIFT", &"Enable: Hold ^3Bash");
+	maps\mp\gametypes\global\_global::precacheString2("STRING_DISABLE_HOLD_SHIFT", &"Disable: Hold ^3Bash");
+	maps\mp\gametypes\global\_global::precacheString2("STRING_GRENADE_EXPLODES_IN", &"Grenade explodes in");
 }
-*/
 
 // Called after the <gametype>.gsc::main() and <map>.gsc::main() scripts are called
 // At this point game specific variables are defined (like game["allies"], game["axis"], game["american_soldiertype"], ...)
 // Called again for every round in round-based gameplay
-/*
 onStartGameType()
 {
 	if(game["firstInit"])
@@ -95,44 +91,54 @@ onStartGameType()
 
 
 
+	logprint("strat::onStartGameType getting spawnpoints\n");
 	// Spawn points
-	spawnpointname = "mp_sd_spawn_attacker";
+	// spawnpointname = "mp_sd_spawn_attacker";
+	spawnpointname = "mp_searchanddestroy_spawn_allied";
 	spawnpoints = getentarray(spawnpointname, "classname");
 	if(!spawnpoints.size)
 	{
-		AbortLevel();
+		maps\mp\gametypes\global\_global::AbortLevel();
 		return;
 	}
+
+	logprint("strat::onStartGameType placing spawnpoints\n");
+
 	for(i = 0; i < spawnpoints.size; i++)
 		spawnpoints[i] placeSpawnpoint();
 
-	spawnpointname = "mp_sd_spawn_defender";
+	//spawnpointname = "mp_sd_spawn_defender";
+	spawnpointname = "mp_searchanddestroy_spawn_axis";
 	spawnpoints = getentarray(spawnpointname, "classname");
 	if(!spawnpoints.size)
 	{
-		AbortLevel();
+		maps\mp\gametypes\global\_global::AbortLevel();
 		return;
 	}
+
 	for(i = 0; i < spawnpoints.size; i++)
 		spawnpoints[i] PlaceSpawnpoint();
 
+	logprint("strat::onStartGameType allowed gameobjects\n");
 
 	allowed[0] = "sd";
 	allowed[1] = "bombzone";
+	allowed[2] = "blocker";
 	maps\mp\gametypes\_gameobjects::main(allowed);
-
-
 
 	thread maps\mp\gametypes\_pam::PAM_Header();
 	level Show_HUD_Global();
 
 	setClientNameMode("auto_change");
 
+	logprint("strat::onStartGameType starting serverinfo thread\n");
+
 	thread serverInfo();
 
 	thread sv_cheats();
+
+	logprint("strat::onStartGameType end\n");
 }
-*/
 
 
 /*================
@@ -149,17 +155,14 @@ firstTime will be qtrue the very first time a client connects
 to the server machine, but qfalse on map changes and tournement
 restarts.
 ================*/
-/*
 onConnecting()
 {
-	self.statusicon = "hud_status_connecting";
+	self.statusicon = "gfx/hud/hud@status_connecting.tga";
 }
-*/
 
 /*
 Called when player is fully connected to game
 */
-/*
 onConnected()
 {
 	self.statusicon = "";
@@ -191,10 +194,8 @@ onConnected()
 	wait level.frame; // wait untill all functions are inicializes
 	self thread Run_Strat();
 }
-*/
 
 // This function is called as last after all events are processed
-/*
 onAfterConnected()
 {
 	// Spectator team
@@ -212,16 +213,16 @@ onAfterConnected()
 			spawnSpectator();
 	}
 	else
-		assertMsg("Unknown team");
+	{
+		logprint("Unknown team\n");
+	}
 }
-*/
 
 /*================
 Called when a player drops from the server.
 Will not be called between levels.
 self is the player that is disconnecting.
 ================*/
-/*
 onDisconnect()
 {
 	iprintln(&"MPSCRIPT_DISCONNECTED", self.name);
@@ -232,7 +233,10 @@ onDisconnect()
 		for (i = 0; i < self.bots.size; i++)
 		{
 			if (isPlayer(self.bots[i]))
-			kick(self.bots[i] getEntityNumber());
+			{
+				//kick(self.bots[i] getEntityNumber());
+				logprint("Bots " + self.name + " should be deleted but vCoD doesn't support bot kick..\n");
+			}
 		}
 	}
 
@@ -242,9 +246,7 @@ onDisconnect()
 		self.botLockPosition delete();
 	}
 }
-*/
 
-/*
 onPlayerDamaging(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime)
 {
 	// Print damage
@@ -272,21 +274,17 @@ onPlayerDamaging(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon
 	if (self.flaying_enabled)
 		return true;
 }
-*/
 
 /*
 Called when player has taken damage.
 self is the player that took damage.
 */
-/*
 onPlayerDamaged(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime)
 {
 
 }
-*/
 
 // Called as last funtction after all onPlayerDamaged events are processed
-/*
 onAfterPlayerDamaged(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, psOffsetTime)
 {
 	if(!(iDFlags & level.iDFLAGS_NO_PROTECTION))
@@ -299,39 +297,36 @@ onAfterPlayerDamaged(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWe
 		//self notify("damaged_player", iDamage);
 
 		// Shellshock/Rumble
-		self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
+		//self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
 	}
 
 	// LOG stuff
 	if(self.sessionstate != "dead")
-		level notify("log_damage", self, eAttacker, sWeapon, iDamage, sMeansOfDeath, sHitLoc, false);
+	{
+		// level notify("log_damage", self, eAttacker, sWeapon, iDamage, sMeansOfDeath, sHitLoc, false);
+		maps\mp\gametypes\_log::logDamage(self, eAttacker, sWeapon, iDamage, sMeansOfDeath, sHitLoc, false);
+	}
 }
-*/
 
 /*
 Called when player is about to be killed.
 self is the player that was killed.
 Return true to prevent the kill.
 */
-/*
 onPlayerKilling(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration)
 {
 }
-*/
 
 /*
 Called when player is killed
 self is the player that was killed.
 */
-/*
 onPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration)
 {
 
 }
-*/
 
 // Called as last funtction after all onPlayerKilled events are processed
-/*
 onAfterPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, psOffsetTime, deathAnimDuration)
 {
 	self endon("disconnect");
@@ -341,7 +336,7 @@ onAfterPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir,
 	obituary(self, attacker, sWeapon, sMeansOfDeath);
 
 	self.sessionstate = "dead";
-	self.statusicon = "hud_status_dead";
+	self.statusicon = "gfx/hud/hud@status_dead.tga";
 
 	// Used to spawn player in same location he dies
 	// Spawn on same location only if was killed by bullet, bash or grenade
@@ -356,18 +351,19 @@ onAfterPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir,
 		self.spawnAngles = undefined;
 	}
 
-	self notify("killed_player");
+	// self notify("killed_player");
 
-	level notify("log_kill", self, attacker,  sWeapon, iDamage, sMeansOfDeath, sHitLoc);
+	// level notify("log_kill", self, attacker,  sWeapon, iDamage, sMeansOfDeath, sHitLoc);
+	maps\mp\gametypes\_log::logKill(self, attacker,  sWeapon, iDamage, sMeansOfDeath, sHitLoc);
 
 	// Wait before dead body is spawned to allow double kills (bullets may stop in this dead body)
 	// Ignore this for shotgun, because it create a smoke effect on dead body (for good feeling)
-	if (sWeapon != "shotgun_mp")
-		waittillframeend;
+	// if (sWeapon != "shotgun_mp")
+		// waittillframeend;
 
 	body = undefined;
 	if(!isdefined(self.switching_teams))
-		body = self cloneplayer(deathAnimDuration);
+		body = self cloneplayer();
 	self.switching_teams = undefined;
 
 	wait level.fps_multiplier * 1.5;
@@ -378,69 +374,63 @@ onAfterPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir,
 	if(isDefined(self.pers["weapon"]))
 		self thread spawnPlayer();
 }
-*/
 
 /*
 Called when command scriptmenuresponse is executed on client side
 self is player that called scriptmenuresponse
 Return true to indicate that menu response was handled in this function
 */
-/*
 onMenuResponse(menu, response)
 {
 	if(menu == game["menu_strat_records"])
 	{
-		if (startsWith(response, "select_"))
+		if (maps\mp\gametypes\global\_global::startsWith(response, "select_"))
 		{
-			substr = getsubstr(response, 7);
-			if (!isDigitalNumber(substr)) return true;
-			line = int(substr);
+			substr = maps\mp\gametypes\global\_global::getsubstr(response, 7);
+			if (!maps\mp\gametypes\global\_global::isDigitalNumber(substr)) return true;
+			line = (int)(substr);
 			if (line < 1 || line > 9) return true;
 
 			self closeMenu();
-			self closeInGameMenu();
+			// self closeInGameMenu();
 
-			record(line-1);
+			//record(line-1);
 		}
-		else if (startsWith(response, "delete_"))
+		else if (maps\mp\gametypes\global\_global::startsWith(response, "delete_"))
 		{
-			substr = getsubstr(response, 7);
-			if (!isDigitalNumber(substr)) return true;
-			line = int(substr);
+			substr = maps\mp\gametypes\global\_global::getsubstr(response, 7);
+			if (!maps\mp\gametypes\global\_global::isDigitalNumber(substr)) return true;
+			line = (int)(substr);
 			if (line < 1 || line > 9) return true;
 
 			self closeMenu();
-			self closeInGameMenu();
+			// self closeInGameMenu();
 
 			self.recordSlots[line-1].used = false;
 
-			recordRequest();
+			//recordRequest();
 		}
 
 
 		return true;
 	}
 }
-*/
 
-/*
 sv_cheats()
 {
 	wait level.fps_multiplier * 0.2;
 
 	setCvar("sv_cheats", 1);
 }
-*/
 
-/*
 spawnPlayer()
 {
 	// Resets the infinite loop check timer, to prevent an incorrect infinite loop error when a lot of script must be run
 	resettimeout();
 
 	// Stop shellshock and rumble
-	self stopShellshock();
-	self stoprumble("damage_heavy");
+	//self stopShellshock();
+	//self stoprumble("damage_heavy");
 
 
 	self.sessionteam = self.pers["team"];
@@ -465,9 +455,9 @@ spawnPlayer()
 	{
 		// Select correct spawn position according to selected team
 		if(self.pers["team"] == "allies")
-			spawnpointname = "mp_sd_spawn_attacker";
+			spawnpointname = "mp_searchanddestroy_spawn_allied";
 		else
-			spawnpointname = "mp_sd_spawn_defender";
+			spawnpointname = "mp_searchanddestroy_spawn_axis";
 
 		spawnpoints = getentarray(spawnpointname, "classname");
 		spawnpoint = maps\mp\gametypes\_spawnlogic::getSpawnpoint_Random(spawnpoints);
@@ -484,14 +474,16 @@ spawnPlayer()
 	else
 		maps\mp\_utility::loadModel(self.pers["savedmodel"]);
 
-
-
 	// Give weapon
 	self setWeaponSlotWeapon("primary", self.pers["weapon"]);
-	self giveMaxAmmo(self.pers["weapon"]);
+	self setWeaponSlotAmmo("primary", maps\mp\gametypes\_weapons::GetGunAmmo(self.pers["weapon"]));
+	self setWeaponSlotClipAmmo("primary", 999);
+	//self giveMaxAmmo(self.pers["weapon"]);
 
 	maps\mp\gametypes\_weapons::givePistol();
-	maps\mp\gametypes\_weapons::giveBinoculars();
+	// maps\mp\gametypes\_weapons::giveBinoculars();
+
+	maps\mp\gametypes\_weapons::giveGrenadesFor(self.pers["weapon"]);
 
 	self setSpawnWeapon(self.pers["weapon"]);
 
@@ -502,17 +494,15 @@ spawnPlayer()
 	self notify("spawned");
 	self notify("spawned_player");
 }
-*/
 
-/*
 spawnSpectator(origin, angles)
 {
 	// Resets the infinite loop check timer, to prevent an incorrect infinite loop error when a lot of script must be run
 	resettimeout();
 
 	// Stop shellshock and rumble
-	self stopShellshock();
-	self stoprumble("damage_heavy");
+	//self stopShellshock();
+	//self stoprumble("damage_heavy");
 
 	self.sessionstate = "spectator";
 	self.spectatorclient = -1;
@@ -540,16 +530,13 @@ spawnSpectator(origin, angles)
 	// Notify "spawned" notifications
 	self notify("spawned");
 }
-*/
 
-/*
 spawnIntermission()
 {
-	assertMsg("Not needed");
+	// assertMsg("Not needed");
+	logprint("Intermission not needed.\n");
 }
-*/
 
-/*
 menuAutoAssign()
 {
 	// Team is already selected, do nothing and open menu again
@@ -605,9 +592,7 @@ menuAutoAssign()
 
 	level notify("joined", assignment, self); // used in first round to check if someone joined team
 }
-*/
 
-/*
 menuAllies()
 {
 	// If team is already axis or we cannot join axis (to keep team balance), open team menu again
@@ -636,9 +621,7 @@ menuAllies()
 
 	level notify("joined", "allies", self); // used in first round to check if someone joined team
 }
-*/
 
-/*
 menuAxis()
 {
 	// If team is already axis or we cannot join axis (to keep team balance), open team menu again
@@ -666,9 +649,7 @@ menuAxis()
 
 	level notify("joined", "axis", self); // used in first round to check if someone joined team
 }
-*/
 
-/*
 menuSpectator()
 {
 	if(self.pers["team"] == "spectator")
@@ -695,9 +676,7 @@ menuSpectator()
 
 	level notify("joined", "spectator", self); // used in first round to check if someone joined team
 }
-*/
 
-/*
 menuStreamer()
 {
 	if(self.pers["team"] == "streamer")
@@ -724,11 +703,11 @@ menuStreamer()
 
 	level notify("joined", "streamer", self); // used in first round to check if someone joined team
 }
-*/
 
-/*
 menuWeapon(response)
 {
+	logprint("sd::menuWeapon response=" + response + "\n");
+
 	// You has to be "allies" or "axis" to change a weapon
 	if(self.pers["team"] != "allies" && self.pers["team"] != "axis")
 		return;
@@ -750,16 +729,25 @@ menuWeapon(response)
 
 	weapon = response;
 
-
+	primary = self getWeaponSlotWeapon("primary");
+	primaryb = self getWeaponSlotWeapon("primaryb");
 
 	// After selecting a weapon, show "ingame" menu when ESC is pressed
-	self setClientCvar2("g_scriptMainMenu", game["menu_ingame"]);
+	//self maps\mp\gametypes\global\_global::setClientCvar2("g_scriptMainMenu", game["menu_ingame"]);
+	if(self.pers["team"] == "allies")
+		self maps\mp\gametypes\global\_global::setClientCvar2("g_scriptMainMenu", game["menu_weapon_allies"]);
+	else if(self.pers["team"] == "axis")
+		self maps\mp\gametypes\global\_global::setClientCvar2("g_scriptMainMenu", game["menu_weapon_axis"]);
 
-	// If new selected weapon is same as actualy selected weapon, do nothing
-	if(isdefined(self.pers["weapon"]) && self.pers["weapon"] == weapon)
+
+	// If newly selected weapon is same as actualy selected weapon and is in player slot -> do nothing
+	if(isdefined(self.pers["weapon"]))
 	{
-		self switchToWeapon(weapon);
-		return;
+		if (self.pers["weapon"] == weapon && primary == weapon)
+		{
+			logprint("_menuWeapon:: do nothing, weapon selected is in player slot already\n");
+			return;
+		}
 	}
 
 	// Save weapon before change (used in weapon_limiter)
@@ -776,15 +764,19 @@ menuWeapon(response)
 		self.pers["weapon"] = weapon;
 
 		// Remove weapon from slot (can be "none", takeWeapon() will take it)
-		self takeWeapon(self getWeaponSlotWeapon("primary"));
-		self takeWeapon(self getWeaponSlotWeapon("primaryb"));
+		self takeWeapon(primary);
+		self takeWeapon(primaryb);
 
 		// Give weapon to primary slot
 		self setWeaponSlotWeapon("primary", weapon);
-		self giveMaxAmmo(weapon);
+		self setWeaponSlotAmmo("primary", maps\mp\gametypes\_weapons::GetGunAmmo(weapon));
+		self setWeaponSlotClipAmmo("primary", 999);
+		//self giveMaxAmmo(weapon);
 
 		// Give pistol to secondary slot + give grenades and smokes
 		maps\mp\gametypes\_weapons::givePistol();
+		//maps\mp\gametypes\_weapons::giveSmokesFor(weapon, 0);
+		maps\mp\gametypes\_weapons::giveGrenadesFor(weapon);
 
 		// Switch to main weapon
 		self switchToWeapon(weapon);
@@ -800,21 +792,17 @@ menuWeapon(response)
 	// Used in wepoan_limiter
 	self notify("weapon_changed", weapon, leavedWeapon, leavedWeaponFromTeam);
 }
-*/
 
-/*
 serverInfo()
 {
 	level.serverinfo_left1 = "No settings";
 	level.serverinfo_left2 = "";
 }
-*/
 
 
 
 
 // * Training Nade Script by Matthias lorenz * (_slightly_ modified by zar & z0d)
-/*
 Run_Strat()
 {
 	self.flying = false;
@@ -843,15 +831,13 @@ Run_Strat()
 
 	if (getCvarInt("sv_punkbuster") == 0)
 	{
-		self thread Key_AddBot();
-		self thread Key_RecordBot();
-		self thread Key_PlayRecord();
+		// self thread Key_AddBot();
+		// self thread Key_RecordBot();
+		// self thread Key_PlayRecord();
 	}
 }
-*/
 
 // Hold Shift to enable / disable fly mode
-/*
 Key_Toggle_FlyMode()
 {
 	self endon("disconnect");
@@ -860,7 +846,8 @@ Key_Toggle_FlyMode()
 	{
 		waittime = 0;
 		//while (self meleebuttonpressed() && !self useButtonPressed() && self playerAds() == 0)
-		while (self meleebuttonpressed() && !self useButtonPressed() && self aimButtonPressed() == 0)
+		// while (self meleebuttonpressed() && !self useButtonPressed() && self aimButtonPressed() == 0)
+		while (self meleebuttonpressed() && !self useButtonPressed())
 		{
 			waittime += level.frame;
 
@@ -880,10 +867,8 @@ Key_Toggle_FlyMode()
 		wait level.fps_multiplier * 0.2;
 	}
 }
-*/
 
 // Double press Shift
-/*
 Key_SavePosition()
 {
 	self endon("disconnect");
@@ -894,7 +879,7 @@ Key_SavePosition()
 		{
 			catch_next = false;
 
-			for(i=0; i<=0.10; i+=0.01)
+			for(i=0; i<=0.30; i+=0.01)
 			{
 				if(catch_next && self meleeButtonPressed())
 				{
@@ -911,10 +896,8 @@ Key_SavePosition()
 		wait level.frame;
 	}
 }
-*/
 
 // Double press F key
-/*
 Key_LoadPosition()
 {
 	self endon("disconnect");
@@ -925,7 +908,7 @@ Key_LoadPosition()
 		{
 			catch_next = false;
 
-			for(i=0; i<=0.10; i+=0.01)
+			for(i=0; i<=0.30; i+=0.01)
 			{
 				if(catch_next && self useButtonPressed())
 				{
@@ -943,7 +926,6 @@ Key_LoadPosition()
 		wait level.frame;
 	}
 }
-*/
 
 // Hold Shift to enable / disable fly mode
 /*
@@ -1049,67 +1031,90 @@ Watch_Grenade_Throw(is_strat)
 	self notify("end_Watch_Grenade_Throw");
 	self endon("end_Watch_Grenade_Throw");
 
-	nadename = self maps\mp\gametypes\_weapons::GetGrenadeTypeName();
+	// nadename = self maps\mp\gametypes\_weapons::GetGrenadeTypeName();
 	//smokename = self maps\mp\gametypes\_weapons::GetSmokeTypeName();
 
+	/*
 	if (is_strat)
 	{
-		self giveWeapon(nadename);
+		//self giveWeapon(nadename);
 		//self giveWeapon(smokename);
 
 		//self setWeaponClipAmmo(nadename, 1);
-		self setWeaponSlotWeapon("grenade", grenadetype);
-		self setWeaponSlotAmmo("grenade", 1);
+		//self setWeaponSlotWeapon("grenade", grenadetype);
+		//self setWeaponSlotAmmo("grenade", 1);
 		//self setWeaponClipAmmo(smokename, 1);
-	}
 
-	grenade_count_old	 = self maps\mp\gametypes\_weapons::getFragGrenadeCount();
+		self setWeaponSlotWeapon("grenade", self maps\mp\gametypes\_weapons::GetGrenadeTypeName());
+		self setWeaponSlotAmmo("grenade", 999);
+	}*/
+
+	//grenade_count_old	 = self maps\mp\gametypes\_weapons::getFragGrenadeCount();
 	//smokegrenade_count_old = self maps\mp\gametypes\_weapons::getSmokeGrenadeCount();
 
-	for(;;)
+	while (self.sessionstate == "playing")
 	{
-		grenade_count 	= self maps\mp\gametypes\_weapons::getFragGrenadeCount();
+		grenade_count 	= self getWeaponSlotAmmo("grenade");
+		// grenade_count 	= self maps\mp\gametypes\_weapons::getFragGrenadeCount();
 		//smokegrenade_count 	= self maps\mp\gametypes\_weapons::getSmokeGrenadeCount();
 
-		if(grenade_count != grenade_count_old /*|| smokegrenade_count != smokegrenade_count_old*/) {
+		// if(grenade_count != grenade_count_old /*|| smokegrenade_count != smokegrenade_count_old*/ && self.sessionstate == "playing") 
+		// {
+		while (grenade_count == self getWeaponSlotAmmo("grenade") && self.sessionstate == "playing") {
+			wait 0.05;
+        }
 
+		if (self.sessionstate != "playing") 
+		{
+			logprint(self.name + " nade_count has changed but sessionstate is not playing: " + self.sessionstate + " - nade_training egress\n");
+            return;
+        }
 
+			/*
 			if (is_strat)
 			{
 				// Refill grenades
 				//self setWeaponClipAmmo(self maps\mp\gametypes\_weapons::GetGrenadeTypeName(), 1);
 				self setWeaponSlotWeapon("grenade", self maps\mp\gametypes\_weapons::GetGrenadeTypeName());
-				self setWeaponSlotAmmo("grenade", 1);
+				self setWeaponSlotAmmo("grenade", 999);
 				//self setWeaponClipAmmo(self maps\mp\gametypes\_weapons::GetSmokeTypeName(), 1);
 
 				// Show explode in timer text
 				if (grenade_count != grenade_count_old)
 					self thread HUD_Grenade_Releases_In();
 			}
+			*/
 
-			// Follow nade if enabled
-			if (self.flaying_enabled)
-			{
-				// Loop grenades in map
-				grenades = getentarray("grenade","classname");
-				for(i=0;i<grenades.size;i++) {
-					if(isDefined(grenades[i].origin) && !isDefined(grenades[i].running)) {
-						// Only if it's your own nade (close to the player)
-						if(distance(grenades[i].origin, self.origin) < 100*100) {
-							grenades[i].running = true;
-							//grenades[i] thread Fly(self);
-							self thread Fly(grenades[i]);
-						}
+		self setWeaponSlotAmmo("grenade", 999);
+
+		// Show explode in timer text
+		//if (grenade_count != grenade_count_old)
+			// self thread HUD_Grenade_Releases_In();
+
+		// Follow nade if enabled
+		if (self.flaying_enabled)
+		{
+			// Loop grenades in map
+			grenades = getentarray("grenade","classname");
+			for(i=0;i<grenades.size;i++) {
+				if(isDefined(grenades[i].origin) && !isDefined(grenades[i].running)) {
+					// Only if it's your own nade (close to the player)
+					if(distanceSquared(grenades[i].origin, self.origin) < 100*100) {
+						grenades[i].running = true;
+						//grenades[i] thread Fly(self);
+						self thread Fly(grenades[i]);
 					}
 				}
 			}
 		}
 
-		grenade_count_old	 = grenade_count;
+		// grenade_count_old	 = grenade_count;
 		//smokegrenade_count_old = smokegrenade_count;
 
-		wait level.fps_multiplier * 0.1;
+		//wait level.fps_multiplier * 0.1;
+		// wait 0.05;
 	}
+	logprint(self.name + " nade_training egress\n");
 }
 
 Fly(nade)
@@ -1228,7 +1233,6 @@ Fly(nade)
 	logprint(self.name + " fly egress\n");
 }
 
-/*
 loadPos()
 {
 	if(!isDefined(self.saved_origin))
@@ -1243,84 +1247,86 @@ loadPos()
 			self iprintln("^3Position ^1loaded");
 		}
 }
-*/
 
-/*
 savePos()
 {
 	self.saved_origin = self.origin;
 	self.saved_angles = self.angles;
 	self iprintln("^3Position ^1saved");
 }
-*/
 
-/*
 Show_HUD_Global()
 {
-	level.granade1 = addHUD(-35, 60, 1.2, (.8,1,1), "right", "top", "right");
+	level.granade1 = maps\mp\gametypes\global\_global::addHUD(605, 60, 1.2, (.8,1,1), "right", "top", "right");
 	level.granade1 setText(&"Grenade flying");
 
 	// Enabled / Disabled
 	// Disable: Hold Shift / Enable: Hold Shift
 
-	level.granade2 = addHUD(-35, 110, .9, (.8,1,1), "right", "top", "right");
-	level.granade2 setText(&"Stop: Press ^3Left mouse");
+	level.granade2 = maps\mp\gametypes\global\_global::addHUD(605, 110, .9, (.8,1,1), "right", "top", "right");
+	level.granade2 setText(&"Return: Press ^3Left mouse");
 
-	level.granade3 = addHUD(-35, 120, .9, (.8,1,1), "right", "top", "right");
-	level.granade3 setText(&"Return: Press ^3Use");
+	// level.granade3 = maps\mp\gametypes\global\_global::addHUD(605, 120, .9, (.8,1,1), "right", "top", "right");
+	// level.granade3 setText(&"Stop: Press ^3Use");
 
 
 
-	level.positionlogo = addHUD(-35, 150, 1.2, (.8,1,1), "right", "top", "right");
+	level.positionlogo = maps\mp\gametypes\global\_global::addHUD(605, 150, 1.2, (.8,1,1), "right", "top", "right");
 	level.positionlogo setText(&"Position");
 
-	level.savelogo = addHUD(-35, 170, .9, (.8,1,1), "right", "top", "right");
+	level.savelogo = maps\mp\gametypes\global\_global::addHUD(605, 170, .9, (.8,1,1), "right", "top", "right");
 	level.savelogo setText(&"Save: Press ^3Bash ^7twice");
 
-	level.loadlogo = addHUD(-35, 180, .9, (.8,1,1), "right", "top", "right");
+	level.loadlogo = maps\mp\gametypes\global\_global::addHUD(605, 180, .9, (.8,1,1), "right", "top", "right");
 	level.loadlogo setText(&"Load: Press ^3Use ^7twice");
 
 
 
 
-	level.trainingdummy = addHUD(-35, 210, 1.2, (.8,1,1), "right", "top", "right");
-	level.trainingdummy setText(&"Training Bot");
+	// level.trainingdummy = maps\mp\gametypes\global\_global::addHUD(605, 210, 1.2, (.8,1,1), "right", "top", "right");
+	// level.trainingdummy setText(&"Training Bot");
 
-	if (getCvarInt("sv_punkbuster") == 0)
-	{
-		level.trainingdummykey = addHUD(-35, 230, .9, (.8,1,1), "right", "top", "right");
-		level.trainingdummykey setText(&"Spawn: Hold ^3Bash ^7+ ^3Use");
+	// if (getCvarInt("sv_punkbuster") == 0)
+	// {
+	// 	level.trainingdummykey = maps\mp\gametypes\global\_global::addHUD(605, 230, .9, (.8,1,1), "right", "top", "right");
+	// 	level.trainingdummykey setText(&"Spawn: Hold ^3Bash ^7+ ^3Use");
 
-		level.trainingdummyrecord = addHUD(-35, 240, .9, (.8,1,1), "right", "top", "right");
-		level.trainingdummyrecord setText(&"Record: Hold ^3Left mouse ^7+ ^3Use");
+	// 	level.trainingdummyrecord = maps\mp\gametypes\global\_global::addHUD(605, 240, .9, (.8,1,1), "right", "top", "right");
+	// 	level.trainingdummyrecord setText(&"Record: Hold ^3Left mouse ^7+ ^3Use");
 
-		level.trainingdummyplay = addHUD(-35, 250, .9, (.8,1,1), "right", "top", "right");
-		level.trainingdummyplay setText(&"Play: Hold ^3Use");
-	}
-	else
-	{
-		level.trainingdummywarn = addHUD(-35, 230, .9, (1,1,0), "right", "top", "right");
-		level.trainingdummywarn setText(&"Disable Punkbuster!");
-	}
+	// 	level.trainingdummyplay = maps\mp\gametypes\global\_global::addHUD(605, 250, .9, (.8,1,1), "right", "top", "right");
+	// 	level.trainingdummyplay setText(&"Play: Hold ^3Use");
+	// }
+	// else
+	// {
+	// 	level.trainingdummywarn = maps\mp\gametypes\global\_global::addHUD(605, 230, .9, (1,1,0), "right", "top", "right");
+	// 	level.trainingdummywarn setText(&"Disable Punkbuster!");
+	// }
 
-	level.clock = addHUD(-35, 280, 1.2, (.8,1,1), "right", "top", "right");
+	level.clock = maps\mp\gametypes\global\_global::addHUD(605, 280, 1.2, (.8,1,1), "right", "top", "right");
 	level.clock setText(&"Clock");
-	level.clocktimer = addHUD(-35, 295, 1, (.98, .98, .60), "right", "top", "right");
+	level.clocktimer = maps\mp\gametypes\global\_global::addHUD(605, 295, 1, (.98, .98, .60), "right", "top", "right");
 	level.clocktimer SetTimerUp(0.1);
-}
-*/
 
-/*
+	level.mainClock = maps\mp\gametypes\global\_global::newHudElem2();
+	level.mainClock.x = 320;
+	level.mainClock.y = 460;
+	level.mainClock.alignX = "center";
+	level.mainClock.alignY = "middle";
+	level.mainClock.font = "bigfixed";
+	level.mainClock setTimer(1);
+}
+
 Show_HUD_Player()
 {
 	self endon("disconnect");
 
 	// Enabled / Disabled
-	self.nadelogo = addHUDClient(self, -35, 80, 1.2, (1,1,1), "right", "top", "right");
+	self.nadelogo = maps\mp\gametypes\global\_global::addHUDClient(self, 605, 80, 1.2, (1,1,1), "right", "top", "right");
 
 	// Disable: Hold Shift
 	// Enable: Hold Shift
-	self.pressad = addHUDClient(self, -35, 100, .9, (0.8,1,1), "right", "top", "right");
+	self.pressad = maps\mp\gametypes\global\_global::addHUDClient(self, 605, 100, .9, (0.8,1,1), "right", "top", "right");
 
 	for(;;)
 	{
@@ -1339,7 +1345,6 @@ Show_HUD_Player()
 		wait level.frame * 3;
 	}
 }
-*/
 
 HUD_Grenade_Releases_In()
 {
@@ -1530,7 +1535,7 @@ Hold Use = play all records
 //				1 = replace record
 //				2 = new record
 //			*/
-//			self setClientCvar2("ui_strat_records_line_" + (i+1), value);
+//			self maps\mp\gametypes\global\_global::setClientCvar2("ui_strat_records_line_" + (i+1), value);
 //		}
 //
 //

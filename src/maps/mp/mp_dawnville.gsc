@@ -1,16 +1,23 @@
-/*
-Ambient sounds made by Intuitive-Gaming.com
+/**	REISSUE Project Ares Mod version 1.15
+ * 
+ * 	Original map & script by ** IW **
+ * 	Edits by reissue_
+ * 
+ * 	********* PLAY HARD, GO PRO **********
 */
-
 
 main()
 {
-	setCullFog (0, 8000, .32, .36, .40, 0);
-	thread pam_ambientsounds();
+////	setCullFog (0, 8000, .32, .36, .40, 0);
+//	ambientPlay("ambient_mp_brecourt");
+
+	maps\mp\_rpam_maps_mp::main();		// start this for ambient sound / fog / improvements
+
 
 	maps\mp\_load::main();
-	maps\mp\mp_dawnville_fx::main();
-	
+//	maps\mp\mp_dawnville_fx::main();	// bomb explosion precache
+
+
 	game["allies"] = "american";
 	game["axis"] = "german";
 
@@ -23,6 +30,7 @@ main()
 	game["defenders"] = "axis";
 	
 	game["layoutimage"] = "mp_dawnville";
+
 
 	//retrival settings
 	level.obj["Field Radio"] = (&"RE_OBJ_FIELD_RADIO");
@@ -61,13 +69,5 @@ main()
 		radio.origin = (-674, -15032, -19);
 		radio.angles = (350, 0, 0);
 		radio.targetname = "hqradio";
-	}
-}
-
-pam_ambientsounds()
-{
-	if (getcvar("rpam_ambientsounds") != "0")
-	{
-		ambientPlay("ambient_mp_brecourt");
 	}
 }

@@ -92,15 +92,15 @@ onConnected()
 	self thread updatePlayerHUD();
 
 	// Show score by default
-	self showScore();
+	//self showScore();
 	logprint("_hud_teamscore::onConnected end\n");
 }
 
 onSpawned()
 {
 	// Show score
-	if (self isEnabled())
-		self showScore();
+	//if (self isEnabled())
+		//self showScore();
 }
 
 

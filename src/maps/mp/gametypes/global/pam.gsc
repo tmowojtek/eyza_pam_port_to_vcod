@@ -1,5 +1,16 @@
+/*
 
+  rPAMext Version: v14 (kvcodPAM v2.9)      
+  
+  Changes:  
+   
+  - rFSGAMECHECK: disabled
+  - rREFERENCEpk3: disabled cod2stuff *todo*
+  - rFOLDER: changed the folder to the actual used one
+  - rEPLACEHOLDER: some better help information when an error occurs by the mod files
 
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 init()
 {
 	logprint("pam::init\n");
@@ -9,7 +20,7 @@ init()
 	{
 		setCvar("pam_mode_custom", "0");
 
-		level thread switchMapToFixVersion();
+//		level thread switchMapToFixVersion();
 	}
 
 	maps\mp\gametypes\global\_global::addEventListener("onCvarChanged", ::onCvarChanged);
@@ -21,6 +32,8 @@ init()
 
 	if(game["firstInit"])
 	{
+//rEPLACEHOLDER
+/*
 		// PAM installed wrong
 		maps\mp\gametypes\global\_global::precacheString2("STRING_NOT_INSTALLED_CORRECTLY_1", &"Error: zPAM is not installed correctly.");
 
@@ -34,15 +47,33 @@ init()
 		maps\mp\gametypes\global\_global::precacheString2("STRING_PAM_WWW_DOWNLOADING", &"WWW downloading must be enabled. Set ^9sv_wwwDownload^7 and ^9sv_wwwBaseURL");
 		maps\mp\gametypes\global\_global::precacheString2("STRING_PAM_BLACKLIST", &"Old zPAM or maps detected in ^9main^7 folder. Delete iwd file you see printed above.");
 
-
 		// Help url
 		maps\mp\gametypes\global\_global::precacheString2("STRING_GITHUB_URL", &"https://github.com/eyza-cod2/zpam3");
 		maps\mp\gametypes\global\_global::precacheString2("STRING_GITHUB_URL_HELP", &"Please visit ^9https://github.com/eyza-cod2/zpam3 ^7for install instructions.");
+*/
+		// PAM installed wrong
+		maps\mp\gametypes\global\_global::precacheString2("STRING_NOT_INSTALLED_CORRECTLY_1", &"ERROR: rPAM is not installed correctly.");
+		
+		// Errors
+		maps\mp\gametypes\global\_global::precacheString2("STRING_PAM_DONT_STEAL", &"ERROR: This version of pam is only for testing! Dont steal!");
+		maps\mp\gametypes\global\_global::precacheString2("STRING_PAM_FS_GAME", &"ERROR: Cvar /fs_game is not empty.)");
+		maps\mp\gametypes\global\_global::precacheString2("STRING_PAM_MUST_EXISTS_UNDER_MAIN", &"ERROR: ^9.pk3^7 no correctly installed."); // ZPAM_RENAME
+		maps\mp\gametypes\global\_global::precacheString2("STRING_PAM_GETTING_IWD_FILES_ERROR", &"ERROR: Getting pk3/iwd files. Make sure iwd files does not contains spaces.");
+		maps\mp\gametypes\global\_global::precacheString2("STRING_PAM_MAPS_MISSING", &"ERROR: Map file pk3/iwd  does not exists.");
+		maps\mp\gametypes\global\_global::precacheString2("STRING_PAM_MAPS_LOAD_ERROR", &"ERROR: Map was not found in this mod.");
+		maps\mp\gametypes\global\_global::precacheString2("STRING_PAM_WWW_DOWNLOADING", &"ERROR: Cvar sv_wwwDownload and sv_wwwBaseURL problem.");
+		maps\mp\gametypes\global\_global::precacheString2("STRING_PAM_BLACKLIST", &"ERROR: Old PAMex, rPAM or rPAM maps detected. Delete what you see printed above.");
+
+		// Help url
+		maps\mp\gametypes\global\_global::precacheString2("STRING_GITHUB_URL", &"HELP: At discord within codbase.eu community.");
+		maps\mp\gametypes\global\_global::precacheString2("STRING_GITHUB_URL_HELP", &"HELP: At discord within codbase.eu community.");
 	}
 
-
-	level.pam_folder = "main/zpam333"; // ZPAM_RENAME
-	level.pam_map_iwd = "zpam_maps_v3";
+//rFOLDER: changed the folder to the actual used one
+//	level.pam_folder = "main/zpam333"; // ZPAM_RENAME
+//	level.pam_map_iwd = "zpam_maps_v3";
+//	level.pam_folder = "__rPAMv115/z_svr_pam_codextended_withoutLib_beta_2_2"; // ZPAM_RENAME
+//	level.pam_map_iwd = "zzzzz_rPAMv115ov_maps_v224";
 
 	level.pam_mode_change = false;
 
@@ -129,10 +160,11 @@ CheckInstallation()
 	// Dont know why, but sv_referencedIwds cvars is defined after 4 frames
 	wait level.fps_multiplier * 0.3; // just to be sure - on some servers cvars are set twice with different value every time
 
-	sv_referencedIwds = getCvar("sv_referencedIwds");
-	sv_referencedIwdNames = getCvar("sv_referencedIwdNames");
-	sv_iwdNames = getCvar("sv_iwdNames");
-	sv_iwds = getCvar("sv_iwds");
+//rREFERENCEpk3: disabled cod2stuff
+//	sv_referencedIwds = getCvar("sv_referencedIwds");
+//	sv_referencedIwdNames = getCvar("sv_referencedIwdNames");
+//	sv_iwdNames = getCvar("sv_iwdNames");
+//	sv_iwds = getCvar("sv_iwds");
 
 	// Referenced contains only loaded iwds, but full path!
 	//"sv_referencedIwds" is: "-340018619 473749641 181429573 780394069 1101180720 1046874969 1053665859 -1652414412 " default: ""
@@ -150,15 +182,17 @@ CheckInstallation()
 		return;
 	}
 */
-	// If fs_mode is set
-	if (maps\mp\gametypes\global\_global::toLower(level.fs_game) != "")
+//rFSGAMECHECK: disabled
+/*	// If fs_mode is set
+	if (maps\mp\gametypes\global\_global::toLower(level.fs_game) != "__rPAMdev")
 	{
-		level thread printTextInLoop("Cvar /fs_game = '" + level.fs_game + "'. It needs to be empty", "Make sure IWD files are installed in main folder, not in mod folder.");
+		level thread printTextInLoop("Cvar /fs_game = '" + level.fs_game + "'. It needs to be __rPAMdev.");
 
 		setError(game["STRING_PAM_FS_GAME"]);
 		return;
 	}
-
+*/
+//--
 	/*
 	// Convert iwd names to array
 	fullNumbersArray = maps\mp\gametypes\global\_global::splitString(sv_referencedIwds, " ");
@@ -376,7 +410,8 @@ ChangeTo(mode)
 
 setError(error)
 {
-	logprint("PAM installation error => " + error + "\n");
+//	logprint("PAM installation error: " + error + "\n");
+	logprint("pamgsc::PAM installation error\n");
 	level.pam_installation_error = true;
 
 	// Is printed only for developer...

@@ -1,23 +1,33 @@
-/*
-Ambient sounds made by Intuitive-Gaming.com
+/**	REISSUE Project Ares Mod version 1.15
+ * 
+ * 	Original map & script by ** IW **
+ * 	Edits by reissue_
+ * 
+ * 	********* PLAY HARD, GO PRO **********
 */
 
 main()
 {
-	setExpFog(0.0001, (float)135/(float)255,(float)130/(float)255,(float)111/(float)255, 0);
-	thread pam_ambientsounds();
+//	r = 150;
+//	g = 159;
+//	b = 169;
+//	r = 162;
+//	g = 159;
+//	b = 145;
+/*	r = 135;
+	g = 130;
+	b = 111;
 
-	//hq settings
-	if (getcvar("g_gametype") != "hq")
-	{
-		radios = getentarray ("hqradio","targetname");
-		for (i=0;i<radios.size;i++)
-			radios[i] hide();
-	}
-	
+	setExpFog(0.0001, (float)r/(float)255,(float)g/(float)255,(float)b/(float)255, 0);
+//	ambientPlay("ambient_mp_brecourt");
+*/
+	maps\mp\_rpam_maps_mp::main();		// start this for ambient sound / fog / improvements
+
+
 	maps\mp\_load::main();
-	maps\mp\mp_bocage_fx::main();
-	
+//	maps\mp\mp_bocage_fx::main();		// bocage smoke plume
+
+
 	game["allies"] = "american";
 	game["axis"] = "german";
 
@@ -31,6 +41,7 @@ main()
 	
 	game["layoutimage"] = "mp_bocage";
 
+
 	//retrival settings
 	level.obj["beacon"] = (&"PATCH_1_3_BEACON");
 	precacheString(&"PATCH_1_3_BEACON");
@@ -39,12 +50,13 @@ main()
 	game["re_attackers_obj_text"] = (&"PATCH_1_3_BOCAGE_OBJ_ATTACKER");
 	game["re_defenders_obj_text"] = (&"PATCH_1_3_BOCAGE_OBJ_DEFENDER");
 	game["re_spectator_obj_text"] = (&"PATCH_1_3_BOCAGE_OBJ_SPECTATOR");
-}
 
-pam_ambientsounds()
-{
-	if (getcvar("rpam_ambientsounds") != "0")
+
+	//hq settings
+	if (getcvar("g_gametype") != "hq")
 	{
-		ambientPlay("ambient_mp_brecourt");
+		radios = getentarray ("hqradio","targetname");
+		for (i=0;i<radios.size;i++)
+			radios[i] hide();
 	}
 }

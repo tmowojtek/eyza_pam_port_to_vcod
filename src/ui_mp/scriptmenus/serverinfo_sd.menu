@@ -16,8 +16,8 @@
 			//scriptMenuResponse "open";
 			open serverinfo_sd_keys;
 
-			//exec "vstr server16;" // server16 contains string with player's settings
-			scriptMenuResponse "server16";
+			exec "vstr server16;" // server16 contains string with player's settings
+			//scriptMenuResponse "server16";
 		}
 		onClose
 		{

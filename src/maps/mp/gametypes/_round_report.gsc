@@ -430,9 +430,9 @@ print()
 getTimeString(time, bombPlanted)
 {
 	if (bombPlanted)
-		return "B " + maps\mp\gametypes\global\_global::formatTime((int)(level.bombtimer - (int)((time - level.bombtimerstart)/1000)));
+		return "B " + maps\mp\gametypes\global\string::formatTimeRoundReport((int)(level.bombtimer - (int)((time - level.bombtimerstart)/1000)));
 	else
-		return maps\mp\gametypes\global\_global::formatTime(level.strat_time + (int)((level.roundlength * 60) - (int)((time - level.starttime)/1000)));
+		return maps\mp\gametypes\global\string::formatTimeRoundReport(level.strat_time + (int)((level.roundlength * 60) - (int)((time - level.starttime)/1000)));
 }
 
 getWeapon(sMeansOfDeath, sWeapon)

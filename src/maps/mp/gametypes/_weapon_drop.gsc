@@ -113,6 +113,7 @@ playersWeaponDrop()
 				slot[0] = self getWeaponSlotWeapon("primary");
 				slot[1] = self getWeaponSlotWeapon("primaryb");
 				current = self getcurrentweapon();
+				// logprint("slot[0]=" + slot[0] + ", slot[1]=" + slot[1] + ", current=" + current + "\n");
 
 				// If primary weapon can not be dropped
 				if (!level.allow_primary_drop && current == slot[0])
@@ -126,6 +127,12 @@ playersWeaponDrop()
 				{
 					self iprintln("^3Cannot drop your last weapon.");
 					break;
+				}
+
+				if (current == "none" && isDefined(level.in_strattime) && level.in_strattime && slot[1] != "none")
+				{
+					// logprint("Special case: player in strattime and secondary weapon is available. Setting current weapon to secondary=" + slot[1] + "\n");
+					current = slot[1];
 				}
 
 				// No weapon in hands (player is on ladder for example)
@@ -164,10 +171,10 @@ playersWeaponDrop()
 				wait level.fps_multiplier * .25;
 
 				// Play sound in strattime indicating where the weapon is dropped
-				if (isDefined(level.in_strattime) && level.in_strattime)
-				{
-					self playSound("zpam_weap_drop");
-				}
+				// if (isDefined(level.in_strattime) && level.in_strattime)
+				// {
+				// 	self playSound("zpam_weap_drop");
+				// }
 
 				wait level.fps_multiplier * .75;
 
@@ -198,7 +205,7 @@ handleWeaponDrop(weaponname, player)
 		}
 	}
 
-	player maps\mp\gametypes\_weapon_limiter::Update_Client_Pistol();
+	//player maps\mp\gametypes\_weapon_limiter::Update_Client_Pistol();
 }
 
 
@@ -266,7 +273,7 @@ dropped_weapon_think(weaponname)
 				{
 					//iprintln(weaponname + " - picked up into empty slot");
 
-					player maps\mp\gametypes\_weapon_limiter::Update_Client_Pistol();
+					//player maps\mp\gametypes\_weapon_limiter::Update_Client_Pistol();
 				}
 				else
 				{

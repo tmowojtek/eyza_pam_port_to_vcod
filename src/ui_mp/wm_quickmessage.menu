@@ -17,17 +17,17 @@
 
 		onEsc
 		{
-			scriptMenuResponse "qm_esc";
+			//scriptMenuResponse "qm_esc";
 		}
 		onOpen
 		{
 			setCvar cl_bypassMouseInput "1";
-			scriptmenuresponse "qm_open";
+			//scriptmenuresponse "qm_open";
 		}
 		onClose
 		{
 			setCvar cl_bypassMouseInput "0";
-			scriptmenuresponse "qm_close";
+			//scriptmenuresponse "qm_close";
 		}
 
 // WINDOW BACKGROUND

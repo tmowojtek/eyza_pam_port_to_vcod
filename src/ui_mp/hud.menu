@@ -64,7 +64,7 @@
 	  	name serverinfo1
 	  	fullScreen MENU_FALSE
 	  	visible MENU_TRUE
-	    rect 10 90 200 80
+	    rect 10 200 200 80
 
 		ITEM_CVAR("ui_serverinfo_hud", 0, 0, .18, ITEM_ALIGN_LEFT, 1 1 1 1)
 	}

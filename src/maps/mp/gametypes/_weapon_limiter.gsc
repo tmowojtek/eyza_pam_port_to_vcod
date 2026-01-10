@@ -26,7 +26,7 @@ onConnectedAll()
 	level thread onStratimeOver();
 
 	level thread Update_All_Weapon_Limits();
-	level thread Update_All_Pistol();
+	//level thread Update_All_Pistol();
 	logprint("_weapon_limiter::onConnectedAll end\n");
 }
 
@@ -71,8 +71,8 @@ onWeaponChanged()
 
         level thread Update_All_Weapon_Limits();
 
-		if (isDefined(level.in_strattime) && level.in_strattime)
-			self Update_Client_Pistol();
+		// if (isDefined(level.in_strattime) && level.in_strattime)
+		// 	self Update_Client_Pistol();
     }
 }
 
@@ -84,7 +84,7 @@ onStratimeOver()
 		level waittill("strat_time_end");
 		wait 0.05;
 
-		level thread Update_All_Pistol();
+		//level thread Update_All_Pistol();
 	}
 	logprint("_weapon_limiter::onStratimeOver end\n");
 }
@@ -99,7 +99,7 @@ Update_All_Pistol()
 	{
 		player = players[p];
 
-		player Update_Client_Pistol();
+		//player Update_Client_Pistol();
 	}
 	//logprint("_weapon_limiter::Update_All_Pistol end\n");
 }

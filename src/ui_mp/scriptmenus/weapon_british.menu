@@ -1,3 +1,7 @@
+//rPAMext Version: v19 (kvcodPAM v2.10)      
+//v29 correction to add mp_sten back to menu
+  
+
 #include "ui_mp/menudef.h"
 #include "ui_mp/macros.h"
 
@@ -49,8 +53,8 @@
 
 		// MENU CHOICES
 		ITEM_WEAPON(ORIGIN_CHOICE1, "button_enfield", "enfield_mp", "@MPMENU_1_LEEENFIELD", "ui_allow_enfield", "enfield", show enfield;, scriptMenuResponse "enfield_mp"; close weapon_british;, "british_grenade", "boltaction";)
-
-		ITEM_WEAPON(ORIGIN_CHOICE2, "button_sten", "sten_mp", "@MPMENU_2_STEN", "ui_allow_m1garand", "sten" , show sten;, scriptMenuResponse "sten_mp"; close weapon_british;, "british_grenade", "smg")
+//v29
+		ITEM_WEAPON(ORIGIN_CHOICE2, "button_sten", "sten_mp", "@MPMENU_2_STEN", "ui_allow_sten", "sten" , show sten;, scriptMenuResponse "sten_mp"; close weapon_british;, "british_grenade", "smg")
 
 		ITEM_WEAPON(ORIGIN_CHOICE3, "button_bren", "bren_mp", "@MPMENU_3_BREN_LMG", "ui_allow_bren", "bren" , show bren;, scriptMenuResponse "bren_mp"; close weapon_british;, "british_grenade", "mg")
 

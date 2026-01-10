@@ -1,3 +1,16 @@
+/*
+
+  rPAMext Version: v14 (kvcodPAM v2.9)      
+   
+  Changes:     
+   
+  - rFIX_bombexplosiong: fix of a logprint which occurs error after bomb explodes
+
+
+
+
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 add_to_array(array, ent)
 {
 	if(!isdefined(ent))
@@ -108,8 +121,11 @@ cannon_effect()
 	if(!isdefined(self.script_fxid))
 		return;
 
-	logprint("_utility::cannon-effect() " + self.target + "\n");
-	logprint("_utility:cannon-effect " + (getent(self.target, "targetname")).origin + "\n");
+//rFIX_bombexplosiong, faulty
+	//logprint("_utility::cannon-effect() " + self.target + "\n");
+	//logprint("_utility:cannon-effect " + (getent(self.target, "targetname")).origin + "\n");
+//rFIX_bombexplosiong
+	logprint("_utility cannon-effect\n");
 
 	if(isdefined(self.target))
 		org = (getent(self.target, "targetname")).origin;

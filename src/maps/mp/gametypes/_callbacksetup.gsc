@@ -1,3 +1,5 @@
+// changed # to *
+//
 //	Callback Setup
 //	This script provides the hooks from code into script for the gametype callback functions.
 
@@ -65,10 +67,10 @@
 Init()
 {
 	logprint("_callbacksetup::init\n");
-	/#
-	thread frame_counter();
-	println("##### " + gettime() + " " + level.frame_num + " ##### Call: maps/mp/gametypes/" + getcvar("g_gametype") + ".gsc::main()");
-	#/
+	// /*
+	// thread frame_counter();
+	// println("##### " + gettime() + " " + level.frame_num + " ##### Call: maps/mp/gametypes/" + getcvar("g_gametype") + ".gsc::main()");
+	// */
 
 	SetupCallbacks();
 }
@@ -93,26 +95,19 @@ Called by code after the level's main script function has run.
 ================*/
 CodeCallback_StartGameType()
 {
-	/#
+	/*
 	println("##### " + gettime() + " " + level.frame_num + " ##### Call: maps/mp/gametypes/_callback.gsc::CodeCallback_StartGameType()");
-	#/
+	*/
 
 	logprint("##### " + gettime() + " ##### Call: maps/mp/gametypes/_callback.gsc::CodeCallback_StartGameType()\n");
 
 	// If the gametype has not beed started, run the startup
 	if(!isDefined(level.gametypestarted) || !level.gametypestarted)
 	{
-		if (getCvar("g_gametype") != "sd")
+		// Process onStartGameType events
+		for (i = 0; i < level.events.onStartGameType.size; i++)
 		{
-			[[level.callbackStartGameType]]();
-		}
-		else
-		{
-			// Process onStartGameType events
-			for (i = 0; i < level.events.onStartGameType.size; i++)
-			{
-				self thread [[level.events.onStartGameType[i]]]();
-			}
+			self thread [[level.events.onStartGameType[i]]]();
 		}
 
 		level.gametypestarted = true; // so we know that the gametype has been started up
@@ -152,47 +147,39 @@ CodeCallback_PlayerConnect()
 {
 	self endon("disconnect");
 
-	/#
+	// /*
 	//if (isDefined(self.alreadyConnected))
 	//	assertMsg("Duplicated connection for " + self.name);
 	//self.alreadyConnected = true;
-	println("##### " + gettime() + " " + level.frame_num + " ##### Connecting: " + self.name);
-	#/
-	
-	if (getCvar("g_gametype") != "sd")
-	{
-		[[level.callbackPlayerConnect]]();
-	}
+	// println("##### " + gettime() + " " + level.frame_num + " ##### Connecting: " + self.name);
+	// */
+
+	self.sessionteam = "none"; // show player in "none" team in scoreboard while connecting
+
+	self thread maps\mp\gametypes\global\events::notifyConnecting();
+
+	// Wait here until player is fully connected
+	self waittill("begin");
+
+	/*
+	println("##### " + gettime() + " " + level.frame_num + " ##### Connected: " + self.name);
+	*/
+
+	//self thread emptyName();
+
+	self thread maps\mp\gametypes\global\events::notifyConnected();
+
+	// If pam is not installed correctly, spawn outside
+	if (level.pam_installation_error)
+		[[level.spawnSpectator]]((999999, 999999, -999999), (90, 0, 0)); // Spawn spectator outside map
+	// Mod is not downloaded
+	else if (self maps\mp\gametypes\_force_download::modIsNotDownloadedForSure())
+		self maps\mp\gametypes\_force_download::spawnModNotDownloaded();
 	else
 	{
-		self.sessionteam = "none"; // show player in "none" team in scoreboard while connecting
-
-		self thread maps\mp\gametypes\global\events::notifyConnecting();
-
-		// Wait here until player is fully connected
-		self waittill("begin");
-
-		/#
-		println("##### " + gettime() + " " + level.frame_num + " ##### Connected: " + self.name);
-		#/
-
-		//self thread emptyName();
-
-		self thread maps\mp\gametypes\global\events::notifyConnected();
-
-		// If pam is not installed correctly, spawn outside
-		if (level.pam_installation_error)
-			[[level.spawnSpectator]]((999999, 999999, -999999), (90, 0, 0)); // Spawn spectator outside map
-
-		// Mod is not downloaded
-		else if (self maps\mp\gametypes\_force_download::modIsNotDownloadedForSure())
-			self maps\mp\gametypes\_force_download::spawnModNotDownloaded();
-
-		else
-		{
-			[[level.onAfterConnected]]();
-		}
+		[[level.onAfterConnected]]();
 	}
+
 }
 
 
@@ -248,18 +235,11 @@ CodeCallback_PlayerDisconnect()
 {
 	self notify("disconnect");
 
-	/#
+	/*
 	println("##### " + gettime() + " " + level.frame_num + " ##### Disconnected: " + self.name);
-	#/
+	*/
 	
-	if (getCvar("g_gametype") != "sd")
-	{
-		[[level.callbackPlayerDisconnect]]();
-	}
-	else
-	{
-		self thread maps\mp\gametypes\global\events::notifyDisconnect();
-	}
+	self thread maps\mp\gametypes\global\events::notifyDisconnect();
 }
 
 
@@ -304,16 +284,6 @@ CodeCallback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath
 
 	// Resets the infinite loop check timer, to prevent an incorrect infinite loop error when a lot of script must be run
 	resettimeout();
-	
-	if (getCvar("g_gametype") != "sd")
-	{
-		/#
-		println("##### " + gettime() + " " + level.frame_num + " ##### PlayerDamage: " + self.name);
-		#/
-		[[level.callbackPlayerDamage]](eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc);
-		
-		return;
-	}
 
 	// Do debug print if it's enabled
 	if(level.g_debugDamage)
@@ -328,14 +298,14 @@ CodeCallback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath
 			self iprintln("You recieved " + iDamage + " damage (" + sHitLoc + ", "+ sMeansOfDeath +")");
 	}
 
-	/#
-	dist = -1; if (isDefined(eAttacker) && isPlayer(eAttacker)) dist = (int)(distance(self getOrigin(), eAttacker getOrigin()));
-	strAttacker = "undefined"; if (isDefined(eAttacker)) if (isPlayer(eAttacker)) strAttacker = "#" + (eAttacker getEntityNumber()) + " " + eAttacker.name; else strAttacker = "-entity-";
-	sPoint = "undefined";	if (isDefined(vPoint)) sPoint = vPoint;
+	// /*
+	// dist = -1; if (isDefined(eAttacker) && isPlayer(eAttacker)) dist = (int)(distance(self getOrigin(), eAttacker getOrigin()));
+	// strAttacker = "undefined"; if (isDefined(eAttacker)) if (isPlayer(eAttacker)) strAttacker = "#" + (eAttacker getEntityNumber()) + " " + eAttacker.name; else strAttacker = "-entity-";
+	// sPoint = "undefined";	if (isDefined(vPoint)) sPoint = vPoint;
 
-	println("##### " + gettime() + " " + level.frame_num + " ##### PlayerDamage: " + strAttacker + " -> #" + self getEntityNumber() + " " + self.name + " health:" + self.health + " damage:" + iDamage + " hitLoc:" + sHitLoc + " iDFlags:" + iDFlags +
-	" sMeansOfDeath:" + sMeansOfDeath + " sWeapon:" + sWeapon + " vPoint:" + sPoint + " distance:" + dist);
-	#/
+	// println("##### " + gettime() + " " + level.frame_num + " ##### PlayerDamage: " + strAttacker + " -> #" + self getEntityNumber() + " " + self.name + " health:" + self.health + " damage:" + iDamage + " hitLoc:" + sHitLoc + " iDFlags:" + iDFlags +
+	// " sMeansOfDeath:" + sMeansOfDeath + " sWeapon:" + sWeapon + " vPoint:" + sPoint + " distance:" + dist);
+	// */
 
 
 	// Protection - players in spectator inflict damage
@@ -508,22 +478,12 @@ CodeCallback_PlayerKilled(eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon
 
 	// Resets the infinite loop check timer, to prevent an incorrect infinite loop error when a lot of script must be run
 	resettimeout();
-	
-	if (getCvar("g_gametype") != "sd")
-	{
-		/#
-		println("##### " + gettime() + " " + level.frame_num + " ##### PlayerDamage: " + self.name);
-		#/
-		[[level.callbackPlayerKilled]](eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc);
-		
-		return;
-	}
 
-	/#
+	/*
 	strAttacker = "undefined"; if (isDefined(eAttacker)) if (isPlayer(eAttacker)) strAttacker = "#" + (eAttacker getEntityNumber()) + " " + eAttacker.name; else strAttacker = "-entity-";
 	println("##### " + gettime() + " " + level.frame_num + " ##### PlayerKilled: " + strAttacker + " -> #" + self getEntityNumber() + " " + self.name + " health:" + self.health + " damage:" + iDamage + " hitLoc:" + sHitLoc +
 	" sMeansOfDeath:" + sMeansOfDeath + " sWeapon:" + sWeapon + " sessionstate:" + self.sessionstate + " timeOffset:" + timeOffset);
-	#/
+	*/
 
 	// Player in spectator cannot be killed
 	if(self.sessionteam == "spectator")

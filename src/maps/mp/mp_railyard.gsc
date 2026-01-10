@@ -1,15 +1,22 @@
-/*
-Ambient sounds made by Intuitive-Gaming.com
+/**	REISSUE Project Ares Mod version 1.15
+ * 
+ * 	Original map & script by ** IW **
+ * 	Edits by reissue_
+ * 
+ * 	********* PLAY HARD, GO PRO **********
 */
 
 main()
 {
-	setCullFog (0, 8000, 0.8, 0.8, 0.8, 0);
-	thread pam_ambientsounds();
+////	setCullFog (0, 8000, 0.8, 0.8, 0.8, 0);
+//	ambientPlay("ambient_mp_railyard");
+
+	maps\mp\_rpam_maps_mp::main();		// start this for ambient sound / fog / improvements
 
 	maps\mp\_load::main();
-	maps\mp\mp_railyard_fx::main();
-	
+//	maps\mp\mp_railyard_fx::main();		// precaches the bomb explosions
+
+
 	game["allies"] = "russian";
 	game["axis"] = "german";
 
@@ -17,10 +24,10 @@ main()
 	game["russian_soldiervariation"] = "winter";
 	game["german_soldiertype"] = "wehrmacht";
 	game["german_soldiervariation"] = "winter";
-	
+
 	game["attackers"] = "allies";
 	game["defenders"] = "axis";
-	
+
 	game["layoutimage"] = "mp_railyard";
 
 	//retrival settings
@@ -60,13 +67,5 @@ main()
 		radio.origin = (-1524, -1120, 44);
 		radio.angles = (0, 275, 0);
 		radio.targetname = "hqradio";
-	}
-}
-
-pam_ambientsounds()
-{
-	if (getcvar("rpam_ambientsounds") != "0")
-	{
-		ambientPlay("ambient_mp_railyard");
 	}
 }

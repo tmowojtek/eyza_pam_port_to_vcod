@@ -12,8 +12,7 @@
         onOpen
         {
             exec "vstr exec_cmd";
-            scriptmenuresponse "stop_recording";
-            
+            //scriptmenuresponse "stop_recording";
         }
     }
 }

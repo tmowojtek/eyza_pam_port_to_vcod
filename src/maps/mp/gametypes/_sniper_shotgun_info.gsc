@@ -23,6 +23,10 @@ updateSniperShotgunHUD()
 {
 	wait level.frame; // wait untill all players are connected
 
+	if (!level.scr_sd_sniper_shotgun_info) {
+		return;
+	}
+
 	for(;;)
 	{
 		exit = !level.scr_sd_sniper_shotgun_info || (!level.in_strattime && !level.roundended);

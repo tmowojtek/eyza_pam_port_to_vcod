@@ -95,8 +95,8 @@ pronePeekFix()
 		origin = self getOrigin();
 		stanceHeight = distance((0, 0, head[2]), (0, 0, origin[2]));
 		//zoom = self playerAds();
-		zoom = self aimButtonPressed();
-		//zoom = 2;
+		//zoom = self aimButtonPressed();
+		zoom = 0;
 		zoomDirection = (zoom - zoomLast); // >1 = zooming | 0=no change | <1 unzooming
 		zoomLast = zoom;
 		/*
@@ -126,8 +126,8 @@ pronePeekFix()
 				wallInCrouch = false;
 
 				eye = self.origin + (0, 0, 10);
-				angles = self getPlayerAngles();
-				//angles = self.angles;
+				//angles = self getPlayerAngles();
+				angles = self.angles;
 				angles = (0, angles[1], angles[2]); // looking in middle
 				forward = anglestoforward(angles);
 				forwardTrace = Bullettrace(eye, eye + (forward[0]*100000, forward[1]*100000, forward[2]*100000),true,self);

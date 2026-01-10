@@ -2,7 +2,7 @@
 
 Load()
 {
-	game["rules_formatString"] = &"Classic";
+	game["rules_formatString"] = &"Classic 20 rounds";
 	game["ruleCvars"] = GetCvars(game["ruleCvars"]);
 }
 

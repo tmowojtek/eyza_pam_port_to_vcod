@@ -6,6 +6,11 @@ custom lib features:
 
 CodeCallback_PlayerCommand(command_object)
 {
+     for(i = 0; i < command_object.size; i++)
+    {
+        logprint("command_object[" + i + "]=" + command_object[i] + "\n");
+    }
+    
     if((command_object[0] == "say" || command_object[0] == "say_team")
         && (isDefined(command_object[1]) && command_object[1][0] == "!"))
     {
@@ -50,7 +55,13 @@ CodeCallback_PlayerCommand(command_object)
         if (command_object[0] == "server16")
         {
             self parseSavedSettings();
+            return;
         }
+    } else if (command_object[0] == "openscriptmenu" && (isDefined(command_object[1]) && command_object[1] == "quicksettings"))
+    {
+        logprint("callbacksetup_additional::CodeCallback_PlayerCommand parsing 'exec vstr server16'\n");
+        self notify("menuresponse", game["menu_quicksettings"], command_object[2]);
+        return;
     }
     self processClientCommand();
 }

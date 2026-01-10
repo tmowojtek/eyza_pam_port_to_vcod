@@ -28,7 +28,7 @@ init()
 	maps\mp\gametypes\global\_global::addEventListener("onSpawnedSpectator",     ::onSpawnedSpectator);
 	maps\mp\gametypes\global\_global::addEventListener("onMenuResponse",  ::onMenuResponse);
 
-	level thread onReadyupOver();
+	// level thread onReadyupOver();
 }
 
 

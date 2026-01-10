@@ -1,4 +1,15 @@
-Init()
+/*
+
+  rPAMext Version: v14 (kvcodPAM v2.9)      
+  
+  Changes:   
+  
+  - rREGISTER: Added new rPAMmaps overhaul cvars for ambient
+  - v29 changes applied for correct tomeout management by kikiii
+
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+init()
 {
 	logprint("cvars::init\n");
 	maps\mp\gametypes\global\_global::addEventListener("onCvarChanged", ::onCvarChanged);
@@ -116,12 +127,17 @@ Register_Shared_Cvars()
 	[[sVar]]("scr_replace_russian", "BOOL", 0);              // level.scr_replace_russian  (can be changed only at start of the game, in progress it will mess up britsh/russians scripts...)
 	*/
 	[[sVar]]("scr_friendlyfire", "INT", 0, 0, 3); 	// level.scr_friendlyfire on, off, reflect, shared
-	[[sVar]]("scr_posters", "BOOL", 0);              // level.scr_posters
-	[[sVar]]("r_fog", "BOOL", 0);
-	[[sVar]]("rpam_ambientsounds", "BOOL", 0);
+//rREGISTER: added new rPAMmaps overhaul cvars for ambient
+//	[[sVar]]("scr_posters", "BOOL", 0);              // level.scr_posters
+//	[[sVar]]("r_fog", "BOOL", 0);
+//	[[sVar]]("rpam_ambientsounds", "BOOL", 1);
+//	[[sVar]]("rpam_ambientfog", "INT", 3, 0, 3);
+//	[[sVar]]("rpam_ambientsmoke", "BOOL", 0);
+//v29 added line below
+	[[sVar]]("g_timeoutsAllowed", "INT", 0, 0, 3);       // disabled vCoD engine timeout - `/matchtimeout` `/matchtimein`
 }
 
-
+//rDEREGISTER
 // This function is called when cvar changes value.
 // Is also called when cvar is registered
 // Return true if cvar was handled here, otherwise false
@@ -144,6 +160,7 @@ onCvarChanged(cvar, value, isRegisterTime)
 			else
 			{
 				level.frame = 1.0 / value;
+//				logprint("cvars:: level.frame=" + level.frame + "\n");
 				level.fps_multiplier = 0.05 / level.frame;
 			}
 			level.sv_fps = value;
@@ -152,11 +169,12 @@ onCvarChanged(cvar, value, isRegisterTime)
 			logprint("Server FPS is: " + value + "\n");
 			return true;
 
+//rDEREGISTER
 		case "rate": 				return true;
 		case "developer":			return true;
 		case "developer_script":		return true;
 		case "g_allowvote":			level.allowvote = value; return true;
-		case "g_cloneplayermaxvelocity":	return true;
+//		case "g_cloneplayermaxvelocity":	return true;
 		case "g_deadchat":			level.deadchat = value; return true;
 		case "g_dropforwardspeed":		return true;
 		case "g_dropupspeedbase":		return true;
@@ -173,12 +191,12 @@ onCvarChanged(cvar, value, isRegisterTime)
 		case "g_speed":				return true;
 		case "g_synchronousclients":		return true;
 		case "g_useholdtime":			return true;
-		case "g_voicechattalkingduration":	return true;
-		case "g_voteabstainweight":		return true;
+//		case "g_voicechattalkingduration":	return true;
+//		case "g_voteabstainweight":		return true;
 		case "g_weaponammopools":		return true;
 		case "g_debugdamage":			level.g_debugDamage = value; return true;
 		case "packetdebug":			return true;
-		case "player_togglebinoculars":		return true;
+//		case "player_togglebinoculars":		return true;
 		case "sv_allowanonymous":		return true;
 		case "sv_allowdownload":		return true;
 		case "sv_disableclientconsole":		return true;
@@ -190,22 +208,28 @@ onCvarChanged(cvar, value, isRegisterTime)
 		case "sv_pure":				return true;
 		case "sv_reconnectlimit":		return true;
 		case "sv_timeout":			return true;
-		case "sv_voice":			return true;
-		case "sv_voicequality":			return true;
-		case "sv_zombietime":			return true;
-		case "voice_deadchat":			return true;
-		case "voice_global":			return true;
-		case "voice_localecho":			return true;
+//		case "sv_voice":			return true;
+//		case "sv_voicequality":			return true;
+//		case "sv_zombietime":			return true;
+//		case "voice_deadchat":			return true;
+//		case "voice_global":			return true;
+//		case "voice_localecho":			return true;
+//v29 added line below
+		case "g_timeoutsAllowed":		return true;
 		case "scr_allow_ambient_sounds":	level.scr_allow_ambient_sounds = value; return true;
-		case "scr_allow_ambient_fire": 		level.scr_allow_ambient_fire = value; return true;
-		case "scr_allow_ambient_weather": 	level.scr_allow_ambient_weather = value; return true;
-		case "scr_allow_ambient_fog": 		level.scr_allow_ambient_fog = value; return true;
+//		case "scr_allow_ambient_fire": 		level.scr_allow_ambient_fire = value; return true;
+//		case "scr_allow_ambient_weather": 	level.scr_allow_ambient_weather = value; return true;
+//		case "scr_allow_ambient_fog": 		level.scr_allow_ambient_fog = value; return true;
 		case "scr_remove_killtriggers":		level.scr_remove_killtriggers = value; return true;
-		case "scr_replace_russian": 		level.scr_replace_russian = value; return true;
+//		case "scr_replace_russian": 		level.scr_replace_russian = value; return true;
 		case "scr_friendlyfire": 		level.scr_friendlyfire = value; return true;
-		case "r_fog":					level.r_fog = value; return true;
-		case "scr_posters":
-			level.scr_posters = value;
+//		case "r_fog":					level.r_fog = value; return true;
+//		case "rpam_ambientsounds":		level.z_rpam_ambientsounds = value; return true;
+//		case "rpam_ambientfog":			level.z_rpam_ambientfog = value; return true;
+//		case "rpam_ambientsmoke":		level.z_rpam_ambientsmoke = value; return true;
+//		case "scr_posters":
+//			level.scr_posters = value;
+
 			if (!isRegisterTime) {
 				level thread restartMap();
 			}

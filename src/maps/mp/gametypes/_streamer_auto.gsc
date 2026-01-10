@@ -237,8 +237,8 @@ playersCanSeeEachOthers()
 			if ((player.pers["team"] == "allies" || player.pers["team"] == "axis") && (player.sessionstate == "playing"))
 			{
 				eye = player maps\mp\gametypes\global\player::getEyeOrigin();
-				angles = player getPlayerAngles();
-				//angles = player.angles;
+				//angles = player getPlayerAngles();
+				angles = player.angles;
 
 				// If player is moving, predict future position
 				predictedPosition = undefined;

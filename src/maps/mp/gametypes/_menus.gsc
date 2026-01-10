@@ -46,7 +46,7 @@ onStartGameType()
 		//precacheMenu(game["menu_weapon_rifles"]);
 		precacheMenu(game["menu_serverinfo"]);
 		precacheMenu(game["menu_callvote"]);
-		//precacheMenu(game["menu_exec_cmd"]);
+		precacheMenu(game["menu_exec_cmd"]);
 		precacheMenu(game["menu_start_recording"]);
 		precacheMenu(game["menu_stop_recording"]);
 		precacheMenu(game["menu_quickcommands"]);
@@ -434,11 +434,19 @@ onMenuResponse(menu, response)
 			break;
 
 		case "streamer":
-			self closeMenu();
-			//self closeInGameMenu();
-			self [[level.streamer]]();
-			if(self.pers["team"] != teamBefore)
-				self thread printTeamChanged(self.name + " Joined as Streamer", "");
+			if (maps\mp\gametypes\_streamer::isStreamerLimitReached())
+			{
+				self openMenu(game["menu_team"]);
+				self thread printTeamChanged(self.name + " Streamer limit reached", "");
+			}
+			else
+			{
+				self closeMenu();
+				//self closeInGameMenu();
+				self [[level.streamer]]();
+				if(self.pers["team"] != teamBefore)
+					self thread printTeamChanged(self.name + " Joined as Streamer", "");
+			}
 			break;
 		case "viewmap":
 			logprint("_menus:: at menu_team and viewmap\n");

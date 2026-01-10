@@ -1,14 +1,22 @@
-/*
-Ambient sounds made by Intuitive-Gaming.com
+/**	REISSUE Project Ares Mod version 1.15
+ * 
+ * 	Original map & script by ** IW **
+ * 	Edits by reissue_
+ * 
+ * 	********* PLAY HARD, GO PRO **********
 */
 
 main()
 {
-	setExpFog(0.00025, .32, .36, .40, 0);
-	thread pam_ambientsounds();
+////	setExpFog(0.00025, .32, .36, .40, 0);
+//	ambientPlay("ambient_mp_brecourt");
+
+	maps\mp\_rpam_maps_mp::main();		// start this for ambient sound / fog / improvements
+
 
 	maps\mp\_load::main();
-	maps\mp\mp_neuville_fx::main();
+//	maps\mp\mp_neuville_fx::main();		// neuville smoke plume
+
 
 	game["allies"] = "american";
 	game["axis"] = "german";
@@ -20,7 +28,7 @@ main()
 
 	game["attackers"] = "allies";
 	game["defenders"] = "axis";
-	
+
 	game["layoutimage"] = "mp_neuville";
 
 	//retrival settings
@@ -34,7 +42,6 @@ main()
 	game["re_defenders_intro_text"] = (&"PATCH_1_3_RE_OBJ_NEUVILLE_SPAWN_DEFENDER");
 	
 	//hq settings
-	
 	if (getcvar("g_gametype") != "hq")
 	{
 		radios = getentarray ("hqradio","targetname");
@@ -87,12 +94,4 @@ main()
 		radio.targetname = "hqradio";
 	}
 	*/
-}
-
-pam_ambientsounds()
-{
-	if (getcvar("rpam_ambientsounds") != "0")
-	{
-		ambientPlay("ambient_mp_brecourt");
-	}
 }

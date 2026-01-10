@@ -173,8 +173,8 @@ getEyeOrigin()
 		return origin + (0, 0, 8);
 	}
 
-	angles = self getPlayerAngles();
-	//angles = self.angles;
+	//angles = self getPlayerAngles();
+	angles = self.angles;
 	head = self.headTag getOrigin();
 
 	// Vector of head
@@ -315,8 +315,8 @@ getFOV()
 	{
 		current = self getcurrentweapon(); // can be none
 		//zoom = self playerAds();	// 1 = zoom | 0 = no zoom
-		zoom = self aimButtonPressed();	// 1 = zoom | 0 = no zoom
-		//zoom = 0;
+		//zoom = self aimButtonPressed();	// 1 = zoom | 0 = no zoom
+		zoom = 0;
 
 		if (self.usingMG)
 		{
@@ -340,8 +340,8 @@ getFOV()
 isPlayerLookingAt(entity)
 {
 	eye = self getEyeOrigin();
-	angles = self getPlayerAngles();
-	//angles = self.angles;
+	//angles = self getPlayerAngles();
+	angles = self.angles;
 	forward = anglestoforward(angles);
 	forwardTrace = Bullettrace(eye, eye + (forward[0]*100000, forward[1]*100000, forward[2]*100000),true,self);
 
@@ -392,8 +392,8 @@ isEntityInSight(entity)
 getLookingAtPosition()
 {
 	eye = self getEyeOrigin();
-	angles = self getPlayerAngles();
-	//angles = self.angles;
+	//angles = self getPlayerAngles();
+	angles = self.angles;
 	forward = anglestoforward(angles);
 	forwardTrace = Bullettrace(eye, eye + (forward[0]*100000, forward[1]*100000, forward[2]*100000),true,self);
 

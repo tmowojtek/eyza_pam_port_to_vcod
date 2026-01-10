@@ -231,8 +231,8 @@ SetPlayerWaypoint(camera_player, waypoint_player)
 		if (isDefined(self.tag) && self.tag == "head")
 			waypoint_origin = waypoint_player.headTag.origin + self.offset;
 
-		point = WorldToScreen(camera_player_real maps\mp\gametypes\global\player::getEyeOrigin(), camera_player_real getPlayerAngles(), waypoint_origin, fov/80.0);
-		//point = WorldToScreen(camera_player_real maps\mp\gametypes\global\player::getEyeOrigin(), self.angles, waypoint_origin, fov/80.0);
+		//point = WorldToScreen(camera_player_real maps\mp\gametypes\global\player::getEyeOrigin(), camera_player_real getPlayerAngles(), waypoint_origin, fov/80.0);
+		point = WorldToScreen(camera_player_real maps\mp\gametypes\global\player::getEyeOrigin(), self.angles, waypoint_origin, fov/80.0);
 
 		self.x = point[0];
 		self.y = point[1];

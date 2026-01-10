@@ -9,7 +9,7 @@
         onOpen
         {
             exec "vstr exec_cmd";
-            scriptMenuResponse "exec_cmd_lol";
+            //scriptMenuResponse "exec_cmd_lol";
         }
     }
 }

@@ -982,7 +982,7 @@ itemDef \
 	textalign		ITEM_ALIGN_RIGHT \
 	textaligny		11 \
 	textstyle		ITEM_TEXTSTYLE_SHADOWED \
-	cvar			cvarprefix "_num" \
+	text			num \
 	cvartest		cvarprefix "_health" \
 	hidecvar		{ ""; "0"; "0_" } \
 	decoration \

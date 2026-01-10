@@ -9,7 +9,7 @@ init()
 	
 	if(game["firstInit"])
 	{
-		precacheHeadIcon("talkingicon");
+		precacheHeadIcon("gfx/hud/headicon@quickmessage");
 	}
 }
 
@@ -20,8 +20,8 @@ quickcommands(response)
 
 	self.spamdelay = true;
 
-	soundalias = "none";
-	saytext = "none";
+	// soundalias = "none";
+	// saytext = "none";
 
 	if(self.pers["team"] == "allies")
 	{
@@ -261,11 +261,11 @@ quickcommands(response)
 		logprint("_quickmessages::quickcommands unknown game[team]=" + game["team"] + "\n");
 	}
 
-	if (soundalias == "none" || saytext == "none")
-	{
-		logprint("_quickmessages::quickcommands soundalias or saytext is none\n");
-		return;
-	}
+	// if (soundalias == "none" || saytext == "none")
+	// {
+	// 	logprint("_quickmessages::quickcommands soundalias or saytext is none\n");
+	// 	return;
+	// }
 
 	self saveHeadIcon();
 	self doQuickMessage(soundalias, saytext);
@@ -281,8 +281,8 @@ quickstatements(response)
 		return;
 
 	self.spamdelay = true;
-	soundalias = "none";
-	saytext = "none";
+	// soundalias = "none";
+	// saytext = "none";
 
 	if(self.pers["team"] == "allies")
 	{
@@ -523,11 +523,11 @@ quickstatements(response)
 		logprint("_quickmessages::statements unknown game[team]=" + game["team"] + "\n");
 	}
 
-	if (soundalias == "none" || saytext == "none")
-	{
-		logprint("_quickmessages::quickstatements soundalias or saytext is none\n");
-		return;
-	}
+	// if (soundalias == "none" || saytext == "none")
+	// {
+	// 	logprint("_quickmessages::quickstatements soundalias or saytext is none\n");
+	// 	return;
+	// }
 
 	self saveHeadIcon();
 	self doQuickMessage(soundalias, saytext);
@@ -543,8 +543,8 @@ quickresponses(response)
 		return;
 
 	self.spamdelay = true;
-	soundalias = "none";
-	saytext = "none";
+	// soundalias = "none";
+	// saytext = "none";
 
 	if(self.pers["team"] == "allies")
 	{
@@ -589,9 +589,30 @@ quickresponses(response)
 				//saytext = "Took long enough!";
 				break;
 			case "7":
-				soundalias = "american_youre_crazy";
-				saytext = &"QUICKMESSAGE_ARE_YOU_CRAZY";
-				//saytext = "Are you crazy?";
+				// soundalias = "american_youre_crazy";
+				// saytext = &"QUICKMESSAGE_ARE_YOU_CRAZY";
+				// //saytext = "Are you crazy?";
+				// break;
+				temp = randomInt(3);
+
+				if(temp == 0)
+				{
+					soundalias = "american_youre_crazy";
+					saytext = &"QUICKMESSAGE_YOURE_CRAZY";
+					//saytext = "You're crazy!";
+				}
+				else if(temp == 1)
+				{
+					soundalias = "american_you_outta_your_mind";
+					saytext = &"QUICKMESSAGE_YOU_OUTTA_YOUR_MIND";
+					//saytext = "You outta your mind?";
+				}
+				else
+				{
+					soundalias = "american_youre_nuts";
+					saytext = &"QUICKMESSAGE_YOURE_NUTS";
+					//saytext = "You're nuts!";
+				}
 				break;
 			default:
 				logprint("_quickmessages::quickresponses unknown response=" + response + "\n");
@@ -763,11 +784,11 @@ quickresponses(response)
 		logprint("_quickmessages::responses unknown game[team]=" + game["team"] + "\n");
 	}
 
-	if (soundalias == "none" || saytext == "none")
-	{
-		logprint("_quickmessages::quickresponses soundalias or saytext is none\n");
-		return;
-	}
+	// if (soundalias == "none" || saytext == "none")
+	// {
+	// 	logprint("_quickmessages::quickresponses soundalias or saytext is none\n");
+	// 	return;
+	// }
 
 	self saveHeadIcon();
 	self doQuickMessage(soundalias, saytext);
@@ -787,7 +808,7 @@ doQuickMessage(soundalias, saytext)
 		if ( !isDefined(level.in_strattime) || (isDefined(level.in_strattime) && !level.in_strattime) )
 		{
 			self.headiconteam = "none";
-			self.headicon = "talkingicon";
+			self.headicon = "gfx/hud/headicon@quickmessage";
 		}
 
 		self playSound(soundalias);
@@ -801,7 +822,7 @@ doQuickMessage(soundalias, saytext)
 			self.headiconteam = "axis";
 
 		if ( !isDefined(level.in_strattime) || (isDefined(level.in_strattime) && !level.in_strattime) )
-			self.headicon = "talkingicon";
+			self.headicon = "gfx/hud/headicon@quickmessage";
 
 		self playSound(soundalias);
 		self sayTeam(saytext);

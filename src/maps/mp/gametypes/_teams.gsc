@@ -121,6 +121,9 @@ onJoinedStreamer()
 
 watchBalance()
 {
+	level notify("watchBalance_end");
+	level endon("watchBalance_end");
+
 	if(level.gametype != "dm")
 	{
 		level.teamlimit = level.maxclients / 2;

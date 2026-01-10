@@ -11,11 +11,11 @@ init()
 
 	if(game["firstInit"])
 	{
-		maps\mp\gametypes\global\_global::precacheString2("STRING_ALLIES_LEFT", &"Allies left");
-		maps\mp\gametypes\global\_global::precacheString2("STRING_AXIS_LEFT", &"Axis left");
+		maps\mp\gametypes\global\_global::precacheString2("STRING_ALLIES_LEFT", &"ALLIES LEFT");
+		maps\mp\gametypes\global\_global::precacheString2("STRING_AXIS_LEFT", &"AXIS LEFT");
 
-		maps\mp\gametypes\global\_global::precacheString2("STRING_ALLIES_ELIMINATED", &"Allies eliminated");
-		maps\mp\gametypes\global\_global::precacheString2("STRING_AXIS_ELIMINATED", &"Axis eliminated");
+		maps\mp\gametypes\global\_global::precacheString2("STRING_ALLIES_ELIMINATED", &"ALLIES ELIMINATED");
+		maps\mp\gametypes\global\_global::precacheString2("STRING_AXIS_ELIMINATED", &"AXIS ELIMINATED");
 	}
 
 
@@ -93,7 +93,7 @@ createHUD()
 	self endon("disconnect");
 
 	// X coorinate is due to text chanigng references on multiple places
-	level.playersLeft_X = 400;
+	level.playersLeft_X = 380;
 	level.playersLeftNum_X = 450;
 	level.playersLeft_myTeam_Y = 460;
 	level.playersLeft_enemy_Y = 470;
@@ -254,7 +254,7 @@ updateHUD(alliesChanged, axisChanged)
 		}
 		else
 		{
-			//self.playersLeft_myTeam.alignX = "center";
+			// self.playersLeft_myTeam.alignX = "center";
 			self.playersLeft_myTeam setText(game["STRING_AXIS_ELIMINATED"]);
 			self.playersLeft_myTeam_num.alpha = 0;
 		}

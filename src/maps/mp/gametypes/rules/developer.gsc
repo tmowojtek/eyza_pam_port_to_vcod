@@ -6,18 +6,18 @@ Load()
 
 GetCvars(arr)
 {
-	//arr = ruleCvarDefault(arr, "scr_sd_timelimit", 0);		// Time limit for map. 0=disabled (minutes)
-	//arr = ruleCvarDefault(arr, "scr_sd_half_round", 12);	// Number of rounds when half-time starts. 0=ignored
-	//arr = ruleCvarDefault(arr, "scr_sd_half_score", 0);	// Number of score when half-time starts. 0=ignored
-	//arr = ruleCvarDefault(arr, "scr_sd_end_round", 24);	// Number of rounds when map ends. 0=ignored
-	//arr = ruleCvarDefault(arr, "scr_sd_end_score", 13);	// Number of score when map ends. 0=ignored
+	//arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_timelimit", 0);		// Time limit for map. 0=disabled (minutes)
+	//arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_half_round", 12);	// Number of rounds when half-time starts. 0=ignored
+	//arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_half_score", 0);	// Number of score when half-time starts. 0=ignored
+	//arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_end_round", 24);	// Number of rounds when map ends. 0=ignored
+	//arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_end_score", 13);	// Number of score when map ends. 0=ignored
 
 	// Round options
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_strat_time", 3);	// Time before round starts where players cannot move
-	//arr = ruleCvarDefault(arr, "scr_sd_roundlength", 2);	// Time length of each round (min)
-	//arr = ruleCvarDefault(arr, "scr_sd_end_time", 6);		// Time et the end of the round (after last player is killed) when you can finding weapons for the next round
-	//arr = ruleCvarDefault(arr, "scr_sd_count_draws", 0);	// If players are killed at same time - count this round (1) or play new round (0)?
-	//arr = ruleCvarDefault(arr, "scr_sd_round_report", 1);		// Print kill and damage stats at the end of the round
+	//arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_roundlength", 2);	// Time length of each round (min)
+	//arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_end_time", 6);		// Time et the end of the round (after last player is killed) when you can finding weapons for the next round
+	//arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_count_draws", 0);	// If players are killed at same time - count this round (1) or play new round (0)?
+	//arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_sd_round_report", 1);		// Print kill and damage stats at the end of the round
 
 
 	// Match Style

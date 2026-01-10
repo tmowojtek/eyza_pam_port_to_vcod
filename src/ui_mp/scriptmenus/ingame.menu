@@ -59,8 +59,14 @@
 		
 		ITEM_BUTTON (ORIGIN_CHOICE4, "4. View Map",;, scriptMenuResponse "viewmap"/*; close ingame;*/)
 
-		ITEM_CVAR("ui_timeout_info", 158, 175, 0.24, ITEM_ALIGN_LEFT, 1.0 1.0 1.0 1.0)
+		ITEM_CVAR("ui_timeout_info", 158, 200, 0.24, ITEM_ALIGN_LEFT, 1.0 1.0 1.0 1.0)
 
+		ITEM_BUTTON_ONCVAR_DISABLED	(ORIGIN_CHOICE5, "5. Call timeout",		"ui_allow_timeout", showCvar { "0" }, ;) // Disabled
+		ITEM_BUTTON_ONCVAR		(ORIGIN_CHOICE5, "5. Call timeout",		"ui_allow_timeout", showCvar { "1" }, ;, scriptMenuResponse "timeout"; CLOSE_ALL;) // Enabled
+		ITEM_BUTTON_ONCVAR_DISABLED	(ORIGIN_CHOICE5, "5. Call timeout",		"ui_allow_timeout", showCvar { "2" }, ;) // Disabled
+		ITEM_BUTTON_ONCVAR_DISABLED	(ORIGIN_CHOICE5, "5. Timeout called",		"ui_allow_timeout", showCvar { "3" }, ;) // Already called
+		ITEM_BUTTON_ONCVAR_DISABLED	(ORIGIN_CHOICE5, "5. Already in timeout",	"ui_allow_timeout", showCvar { "4" }, ;) // In timeout
+		ITEM_BUTTON_ONCVAR		(ORIGIN_CHOICE5, "5. Cancel timeout",		"ui_allow_timeout", showCvar { "5" }, ;, scriptMenuResponse "timeout"; CLOSE_ALL;) // Cancel timeout
 
 
 		// Close

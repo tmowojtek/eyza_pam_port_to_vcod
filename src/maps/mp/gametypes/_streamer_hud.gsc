@@ -717,6 +717,28 @@ getPlayersByTeam(teamname)
 
 fill_box(index, barSide, teamname, player)
 {
+	playerHealth = 0;
+	weapon1 = "none";
+	weapon2 = "none";
+	stats = undefined;
+	grenades = 0;
+	smokes = 0;
+	playerIsReady = false;
+	playerName = undefined;
+	if (isDefined(player)) 
+	{
+		playerHealth = player.health;
+		weapon1 = player getweaponslotweapon("primary");
+    	weapon2 = player getweaponslotweapon("primaryb");
+		weapon1 = maps\mp\gametypes\_weapons::getWeaponName2(weapon1);
+		weapon2 = maps\mp\gametypes\_weapons::getWeaponName2(weapon2);
+		stats = player maps\mp\gametypes\_menu_scoreboard::getPlayerStats();
+		grenades = player maps\mp\gametypes\_weapons::getFragGrenadeCount();
+		smokes = player maps\mp\gametypes\_weapons::getSmokeGrenadeCount();
+		playerIsReady = player.isReady;
+		playerName = player.name;
+	}
+
 	teamNum = "1";
 	if (barSide == "right")
 		teamNum = "2";
@@ -724,23 +746,23 @@ fill_box(index, barSide, teamname, player)
 	health = "";
 	// Because health is showed via menu elements, the health bar is splited only into a few sizes
 	// So according to helth we select most corresponding size
-	if (player.health <= 0)
+	if (playerHealth <= 0)
 		health =  "0";
 
-	else if (player.health < 20)
+	else if (playerHealth < 20)
 		health =  "10";
 
-	else if (player.health < 70)
+	else if (playerHealth < 70)
 		health =  "50";
 
-	else if (player.health < 99)
+	else if (playerHealth < 99)
 		health =  "80";
 
 	else
 		health =  "100";
 
 	// Health also contains apended info about color
-	if (player.health > 0)
+	if (playerHealth > 0)
 	{
 	      	if (teamname == "allies")
 			health = health + "_allies";
@@ -762,20 +784,15 @@ fill_box(index, barSide, teamname, player)
 
 
 	// Weapon names
-	weapon1 = player getweaponslotweapon("primary");
-    weapon2 = player getweaponslotweapon("primaryb");
-	weapon1 = maps\mp\gametypes\_weapons::getWeaponName2(weapon1);
-	weapon2 = maps\mp\gametypes\_weapons::getWeaponName2(weapon2);
 	weapon_text = "";
 	if (inStatsMode)
 	{
-		stats = player maps\mp\gametypes\_menu_scoreboard::getPlayerStats();
 		if (isDefined(stats))
 		{
 			weapon_text = "Assists: " + stats["assists"] + "   Plants: " + stats["plants"] + "   Defuses: " + stats["defuses"];
 		}
 	}
-	else if (player.health > 0)
+	else if (playerHealth > 0)
 	{
 		if (weapon2 == "none" || weapon2 == "Pistol")
 			weapon_text = weapon1;
@@ -796,11 +813,8 @@ fill_box(index, barSide, teamname, player)
 		"grenade2_smoke" - show multi-grenade and smoke icons
 	*/
 	icons = "";
-	if (player.health > 0 && inStatsMode == false)
+	if (playerHealth > 0 && inStatsMode == false)
 	{
-		grenades = player maps\mp\gametypes\_weapons::getFragGrenadeCount();
-		smokes = player maps\mp\gametypes\_weapons::getSmokeGrenadeCount();
-
 		if (grenades >= 2)
 			icons += "grenade2";
 		else if (grenades == 1)
@@ -834,14 +848,14 @@ fill_box(index, barSide, teamname, player)
 	}
 	if (level.in_readyup)
 	{
-		if (player.isReady) 	name += "^2o^7  ";
+		if (playerIsReady) 	name += "^2o^7  ";
 		else		 	name += "^1o^7  ";
 	}
-	name += maps\mp\gametypes\global\_global::removeColorsFromString(player.name);
+	name += maps\mp\gametypes\global\_global::removeColorsFromString(playerName);
 
 
 	//logPrint("fillbox " + name + "\n");
-	self maps\mp\gametypes\global\_global::setClientCvarIfChanged("ui_streamersystem_team"+teamNum+"_player"+index+"_num",		(index+1));
+	//self maps\mp\gametypes\global\_global::setClientCvarIfChanged("ui_streamersystem_team"+teamNum+"_player"+index+"_num",		(index+1));
 	self maps\mp\gametypes\global\_global::setClientCvarIfChanged("ui_streamersystem_team"+teamNum+"_player"+index+"_health",		health);
 	self maps\mp\gametypes\global\_global::setClientCvarIfChanged("ui_streamersystem_team"+teamNum+"_player"+index+"_name",		name);
 	self maps\mp\gametypes\global\_global::setClientCvarIfChanged("ui_streamersystem_team"+teamNum+"_player"+index+"_score",		player.score + " / " + player.deaths);

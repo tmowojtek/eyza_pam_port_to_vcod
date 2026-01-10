@@ -201,6 +201,8 @@ killcam(attackerNum, pastTime, length, offsetTime, respawn, isReplay)
 		self.kc_timer.sort = 999;
 	}
 
+	// millis timer to be at the same spot as timer w/o millis
+	self.kc_timer.x = 336;
 	self.kc_timer setTenthsTimer(length - cutedTime);
 
 	self thread spawnedKillcamCleanup();

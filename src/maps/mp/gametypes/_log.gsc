@@ -7,13 +7,13 @@ init()
     maps\mp\gametypes\global\_global::addEventListener("onConnected",     ::onConnected);
     maps\mp\gametypes\global\_global::addEventListener("onDisconnect",    ::onDisconnect);
 
-    level thread onReadyUpOver();
+    // level thread onReadyUpOver();
     //level thread onDamage();
     //level thread onPlayerKilled();
 
     level thread onRoundEnd();
 
-    level thread onServerRestart();
+    // level thread onServerRestart();
 }
 
 onConnected()
@@ -32,6 +32,11 @@ onReadyUpOver()
 {
     level waittill("rupover");
 
+    logPrint("ReadyupDone;\n");
+}
+
+logOnReadyUpOver()
+{
     logPrint("ReadyupDone;\n");
 }
 
@@ -107,6 +112,11 @@ logDamage(player, eAttacker, sWeapon, iDamage, sMeansOfDeath, sHitLoc, isFriendl
 		attack_name = self_name;
 		attack_team = self_team;
 	}
+
+    if(!isDefined(normalizedDamage))
+    {
+        normalizedDamage = "";
+    }
 
     logPrint("Damage;"+self_guid+";"+self_num+";"+self_name+";"+self_team+";"+attack_guid+";"+attack_num+";"+attack_name+";"+attack_team+";"+sWeapon+";"+iDamage+";"+sMeansOfDeath+";"+sHitLoc+";"+normalizedDamage+"\n");
 }

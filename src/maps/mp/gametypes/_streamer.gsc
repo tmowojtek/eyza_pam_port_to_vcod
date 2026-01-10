@@ -13,10 +13,14 @@ init()
 	if (!isDefined(game["streamerSystem_recommandedPlayerMode_teamRight_player"]) || level.gametype != "sd" || game["round"] == 0) // round in case of bash
 		game["streamerSystem_recommandedPlayerMode_teamRight_player"] = undefined;
 
+	maps\mp\gametypes\global\_global::addEventListener("onCvarChanged", ::onCvarChanged);
+
+	maps\mp\gametypes\global\_global::registerCvar("scr_streamer_limit", "INT", 1, 0, 1);
 
 	maps\mp\gametypes\global\_global::addEventListener("onConnected",  	::onConnected);
 	maps\mp\gametypes\global\_global::addEventListener("onSpawnedPlayer",  	::onSpawnedPlayer);
 	maps\mp\gametypes\global\_global::addEventListener("onSpawnedSpectator",  ::onSpawnedSpectator);
+
 
 	if (!level.streamerSystem)
 	{
@@ -28,6 +32,18 @@ init()
 	maps\mp\gametypes\global\_global::addEventListener("onMenuResponse",  	::onMenuResponse);
 
 	//setCvar("debug_spectator", 1);
+}
+
+// This function is called when cvar changes value.
+// Is also called when cvar is registered
+// Return true if cvar was handled here, otherwise false
+onCvarChanged(cvar, value, isRegisterTime)
+{
+	switch(cvar)
+	{
+		case "scr_streamer_limit": 		level.scr_streamer_limit = value; return true;
+	}
+	return false;
 }
 
 // Called even is streamer system is disabled
@@ -82,6 +98,24 @@ onSpawnedSpectator()
 	self exit();
 }
 
+isStreamerLimitReached()
+{
+	self endon("disconnect");
+
+	count = 0;
+	players = getentarray("player", "classname");
+	for(p = 0; p < players.size; p++)
+	{
+		player = players[p];
+		if (isDefined(player) && isDefined(player.pers["team"]) && player.pers["team"] == "streamer")
+		{
+			count++;
+		}
+	}
+
+	logprint("_streamer::isStreamerLimitReached result - " + count + ":" + level.scr_streamer_limit + " -> " + (count < level.scr_streamer_limit) + "\n");
+	return count >= level.scr_streamer_limit;
+}
 
 onSpawnedStreamer()
 {
@@ -134,6 +168,7 @@ exit()
 
 join_streamer_isEnabled()
 {
+	logprint("_streamer::join_streamer_isEnabled streamerSystem_autoJoinSpectatorTeam=" + self.pers["streamerSystem_autoJoinSpectatorTeam"] + "\n");
 	return self.pers["streamerSystem_autoJoinSpectatorTeam"];
 }
 
@@ -225,7 +260,7 @@ toggle_color_mode()
 move_to_streamers()
 {
 	self endon("disconnect");
-	self endon("menuresponse"); // any input from user will cause stop joining
+	// self endon("menuresponse"); // any input from user will cause stop joining
 
 	// Simulate joining streamer team
 	// It needs to be distributed like this because a lot of cvars for scoreboard and spectator bars are beeing sent to players (command overflow fix)
@@ -575,8 +610,8 @@ openStreamerMenu()
 
 	spectatorclient = self.spectatorclient;
 	origin = self getOrigin();
-	angles = self getPlayerAngles();
-	//angles = self.angles;
+	//angles = self getPlayerAngles();
+	angles = self.angles;
 
 	// Black fullscreen backgound with animation
 	if (isDefined(self.spectator_blackbg))
@@ -646,6 +681,7 @@ openStreamerMenu()
 		self spawn(origin, angles);
 
 		self.pers["streamerSystem_menu_opened"] = true;
+		logprint("_streamer::openStreamMenu streamersystem_menu_open=true\n");
 	}
 
 	self.spectatingMenuOpenRunning = undefined;

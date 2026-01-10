@@ -86,6 +86,8 @@ getClipAmmo()
 manageWeaponCycleDelay()
 {
     self endon("disconnect");
+    self notify("manageWeaponCycleDelay");
+	self endon("manageWeaponCycleDelay");
 
     lastClipAmmo = 0;
     lastWeapon = "";
@@ -170,7 +172,7 @@ manageWeaponCycleDelay()
                 wait level.frame*3;
 
   	            if (level.debug_fastreload) self iprintln("^1Preventing fast reload bug");
-  	                self maps\mp\gametypes\global\_global::setClientCvar2("cg_weaponCycleDelay", "200");	// time in ms when player can change weapon again
+  	            self maps\mp\gametypes\global\_global::setClientCvar2("cg_weaponCycleDelay", "200");	// time in ms when player can change weapon again
       		}
         }
 

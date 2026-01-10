@@ -107,8 +107,8 @@ onPlayerKilled(eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHi
 		killRecord.fullyFollowedBySpectator = isDefined(level.streamerSystem_player) && eAttacker == level.streamerSystem_player;
 		killRecord.followedKillsBySpectator = killRecord.fullyFollowedBySpectator * 1; // how many kills were watched by spectator
 		//killRecord.nozoom = /*(eAttacker playerAds() == 0) &&*/ (distance(eAttacker.origin, self.origin) > 800) && (sMeansOfDeath != "MOD_GRENADE_SPLASH") && sWeapon != "mg42_bipod_stand_mp" && sWeapon != "30cal_stand_mp";
-		killRecord.nozoom = (eAttacker aimButtonPressed() == 0) && (distance(eAttacker.origin, self.origin) > 800) && (sMeansOfDeath != "MOD_GRENADE_SPLASH") && sWeapon != "mg42_bipod_stand_mp" && sWeapon != "30cal_stand_mp";
-		//killRecord.nozoom = /*(eAttacker playerAds() == 0) &&*/ (distance(eAttacker.origin, self.origin) > 800) && (sMeansOfDeath != "MOD_GRENADE_SPLASH") && sWeapon != "mg42_bipod_stand_mp" && sWeapon != "30cal_stand_mp";
+		//killRecord.nozoom = (eAttacker aimButtonPressed() == 0) && (distance(eAttacker.origin, self.origin) > 800) && (sMeansOfDeath != "MOD_GRENADE_SPLASH") && sWeapon != "mg42_bipod_stand_mp" && sWeapon != "30cal_stand_mp";
+		killRecord.nozoom = /*(eAttacker playerAds() == 0) &&*/ (distance(eAttacker.origin, self.origin) > 800) && (sMeansOfDeath != "MOD_GRENADE_SPLASH") && sWeapon != "mg42_bipod_stand_mp" && sWeapon != "30cal_stand_mp";
 		killRecord.bash = sMeansOfDeath == "MOD_MELEE";
 		killRecord.grenade = sMeansOfDeath == "MOD_GRENADE_SPLASH";
 		killRecord.bombPlanted = (level.gametype == "sd" && level.bombplanted);

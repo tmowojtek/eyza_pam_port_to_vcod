@@ -22,13 +22,13 @@ Init()
 	switch (level.gametype)
 	{
 		case "sd": 	loaded = Load_SD_Rules(); break;
-		//case "dm": 	loaded = Load_DM_Rules(); break;
-		//case "tdm": 	loaded = Load_TDM_Rules(); break;
+		case "dm": 	loaded = Load_DM_Rules(); break;
+		case "tdm": 	loaded = Load_TDM_Rules(); break;
 		//case "ctf": 	loaded = Load_CTF_Rules(); break;
 		//case "hq": 	loaded = Load_HQ_Rules(); break;
 		//case "htf": 	loaded = Load_HTF_Rules(); break;
 		//case "re": 	loaded = Load_RE_Rules(); break;
-		//case "strat": 	loaded = Load_Strat_Rules(); break;
+		case "strat": 	loaded = Load_Strat_Rules(); break;
 	}
 	if (loaded) 
 	{
@@ -54,7 +54,7 @@ Init()
 	if (game["firstInit"] || overtime_changed)
 	{
 		//assert(level.pam_mode != "");
-		if (level.pam_mode != "")
+		if (level.pam_mode == "")
 		{
 			logprint("_rules::Init - empty pam_mode!!\n");
 		}
@@ -148,6 +148,7 @@ Init()
 		precacheString(game["leagueOptionsString"]);
 	}
 
+	logprint("Loaded rules for pam mode: " + level.pam_mode);
 	println("Loaded rules for pam mode: " + level.pam_mode);
 }
 
@@ -386,7 +387,6 @@ Load_SD_Rules()
 	return true;
 }
 
-/*
 Load_DM_Rules()
 {
 	if (level.pam_mode == "pub")
@@ -467,6 +467,7 @@ Load_TDM_Rules()
 	return true;
 }
 
+/*
 Load_CTF_Rules()
 {
 	if (level.pam_mode == "pub")
@@ -624,9 +625,10 @@ Load_RE_Rules()
 }
 */
 
-// Load_Strat_Rules()
-// {
-//     maps\mp\gametypes\rules\strat\strat::Load();
+Load_Strat_Rules()
+{
+	logprint("Loading strat rules\n");
+    maps\mp\gametypes\rules\strat\strat::Load();
 
-//     return true;
-// }
+    return true;
+}

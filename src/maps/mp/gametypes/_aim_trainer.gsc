@@ -274,15 +274,15 @@ setKillTimeout(seconds, target)
 getTargetPos(randomize)
 {
 	eye = self maps\mp\gametypes\global\player::getEyeOrigin();
-	angles = self getPlayerAngles();
-	//angles = self.angles;
+	//angles = self getPlayerAngles();
+	angles = self.angles;
 	weapon = self getcurrentweapon();
 	isSniper = maps\mp\gametypes\_weapons::isSniper(weapon);
 	//isShotgun = maps\mp\gametypes\_weapons::isShotgun(weapon);
 	isShotgun = false;
 	//zoom = self playerAds();
-	zoom = self aimButtonPressed();
-	//zoom = false;
+	//zoom = self aimButtonPressed();
+	zoom = false;
 	fov = self maps\mp\gametypes\global\player::getFOV() / 80;
 
 

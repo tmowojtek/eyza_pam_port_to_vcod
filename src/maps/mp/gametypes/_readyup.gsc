@@ -14,6 +14,8 @@ init()
 	maps\mp\gametypes\global\_global::registerCvar("scr_readyup_nadetraining", "BOOL", 0);
 	maps\mp\gametypes\global\_global::registerCvar("scr_readyup_start_timer", "FLOAT", 0, 0, 10);
 
+	maps\mp\gametypes\global\_global::registerCvarEx("C", "scr_readyup_forceall", "BOOL", 0);
+
 	if(game["firstInit"])
 	{
 		// Ready-up
@@ -78,6 +80,7 @@ init()
 	{
 		game["Do_Ready_up"] = false;		// request from other scripts to run readyup
 		game["readyup_first_run"] = level.scr_readyup;
+		game["readyup_first_run_ending_for_matchinfo"] = false;
 	}
 
 	// Start readyup if is request (halftime, timeout, overtime) or is enabled by cvar on fresh start
@@ -101,6 +104,13 @@ onCvarChanged(cvar, value, isRegisterTime)
 		case "scr_readyup_autoresume_map": 	level.scr_readyup_autoresume_map = value; return true;
 		case "scr_readyup_nadetraining":level.scr_readyup_nadetraining = value; return true;
 		case "scr_readyup_start_timer": 	level.scr_readyup_start_timer = value; return true;
+		case "scr_readyup_forceall":
+			if (value == 1)
+			{
+				thread forceAllReady();
+				maps\mp\gametypes\global\_global::changeCvarQuiet("scr_readyup_forceall", 0);
+			}
+			return true;
 	}
 	return false;
 }
@@ -265,7 +275,7 @@ onSpawned()
 				self thread maps\mp\gametypes\strat::Watch_Grenade_Throw(false);
 
 	            // Keep adding grenades in readyup
-	            thread giveGrenadesInReadyup();
+	            // self thread giveGrenadesInReadyup();
 		}
     }
 }
@@ -339,7 +349,7 @@ onPlayerKilling(eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sH
 		self.sessionstate = "dead";
 
 		if (!isDefined(self.switching_teams))
-			self thread respawnOnKilled(sWeapon, deathAnimDuration);
+			self thread respawnOnKilled(sWeapon);
 	}
 
 	// Reset flag that means that this kill was executed while player is chaging sides via menu (suicide() was called)
@@ -349,7 +359,7 @@ onPlayerKilling(eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sH
 	// this is because ctf, htf, hq need to do some job when player is killed (because of team swap or /kill) in timeout - flag needs to be dropped or some hud removed
 }
 
-respawnOnKilled(sWeapon, deathAnimDuration)
+respawnOnKilled(sWeapon)
 {
 	self endon("disconnect");
 	self endon("spawned");
@@ -362,7 +372,7 @@ respawnOnKilled(sWeapon, deathAnimDuration)
 	// Clone players model for death animations
 	body = undefined;
 	if(!isdefined(self.switching_teams))
-		body = self cloneplayer(deathAnimDuration);
+		body = self cloneplayer();
 
 	wait level.fps_multiplier * 2;
 
@@ -590,8 +600,8 @@ playerReadyUpThread()
 					keyReleased = true;
 
 				//if (self meleebuttonpressed() && self playerAds() != 1)
-				if (self meleebuttonpressed() && self aimButtonPressed() != 1)
-				//if (self meleebuttonpressed() /*&& self playerAds() != 1*/)
+				//if (self meleebuttonpressed() && self aimButtonPressed() != 1)
+				if (self meleebuttonpressed() /*&& self playerAds() != 1*/)
 					holdTime += 1;
 
 				/*
@@ -855,18 +865,22 @@ PrintTeamAndHowToUse()
 End_Readyup_Mode()
 {
 	level notify("rupover");
+	maps\mp\gametypes\_log::logOnReadyUpOver();
 
 	// Black background, countdowntime, First half starting with timer
 	thread HUD_Half_Start(level.scr_readyup_start_timer);
 
     // Coomon lets got that bastartdss blaballa
-    thread playStartSound();
+    // thread playStartSound();
+
+	game["readyup_first_run_ending_for_matchinfo"] = true;
 
 
 	wait level.fps_multiplier * level.scr_readyup_start_timer; // (10sec)
 
 	// reset flag as readyup was runned
 	game["readyup_first_run"] = false;
+	game["readyup_first_run_ending_for_matchinfo"] = false;
 
 	if (!level.in_timeout)
 	{
@@ -1563,4 +1577,15 @@ playLastManSound()
 	wait level.fps_multiplier * 30;
 
 	self.lastMan = false;
+}
+
+forceAllReady()
+{
+	players = getentarray("player", "classname");
+	for(i = 0; i < players.size; i++)
+	{
+		players[i] setReady();
+	}
+
+	level Check_All_Ready();
 }

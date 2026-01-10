@@ -477,8 +477,8 @@ hud_waypoint_animate(spectator, player)
 		{
 			stance = player maps\mp\gametypes\global\player::getStance(); // prone crouch stand
 
-			angles = player getPlayerAngles();
-			//angles = player.angles;
+			//angles = player getPlayerAngles();
+			angles = player.angles;
 
 			diff = (player.origin - spectated_player.origin);
 			diff = (diff[0], diff[1], 0);
