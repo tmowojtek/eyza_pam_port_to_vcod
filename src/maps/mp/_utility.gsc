@@ -121,11 +121,8 @@ cannon_effect()
 	if(!isdefined(self.script_fxid))
 		return;
 
-//rFIX_bombexplosiong, faulty
 	//logprint("_utility::cannon-effect() " + self.target + "\n");
 	//logprint("_utility:cannon-effect " + (getent(self.target, "targetname")).origin + "\n");
-//rFIX_bombexplosiong
-	logprint("_utility cannon-effect\n");
 
 	if(isdefined(self.target))
 		org = (getent(self.target, "targetname")).origin;

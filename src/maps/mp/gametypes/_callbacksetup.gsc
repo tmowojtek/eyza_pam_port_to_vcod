@@ -67,10 +67,10 @@
 Init()
 {
 	logprint("_callbacksetup::init\n");
-	// /*
+	// /#
 	// thread frame_counter();
 	// println("##### " + gettime() + " " + level.frame_num + " ##### Call: maps/mp/gametypes/" + getcvar("g_gametype") + ".gsc::main()");
-	// */
+	// #/
 
 	SetupCallbacks();
 }
