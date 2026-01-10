@@ -35,12 +35,10 @@ init()
 //addEventListener
 	maps\mp\gametypes\global\_global::addEventListener("onConnected",         ::onConnected);
 
-	setCvar("rate", "25000");
-	setCvar("sv_maxRate", "25000");
-	setCvar("sv_pure", "1");
-
-//rPAM competitive settings YES
-    setCvar("rpam_competitive", "1");
+    setCvar("rate", "25000");
+    setCvar("sv_maxRate", "25000");
+	setCvar("cl_maxpackets", "100");
+    setCvar("sv_pure", "1");
 }
 
 onConnected()
