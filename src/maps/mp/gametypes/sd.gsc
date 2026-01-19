@@ -2018,6 +2018,8 @@ endRound(roundwinner)
 	// Print damage stats
 	maps\mp\gametypes\_round_report::printToAll();
 
+	// Update adr_lastUpdate and gerenade_damage_lastUpdate for each player.
+	maps\mp\gametypes\_player_stat::UpdateAdrAndGrenadeDamageWhenRoundIsOver();
 
 	// In SD there are 3 checks: Time limit, Score limit and Round limit
 

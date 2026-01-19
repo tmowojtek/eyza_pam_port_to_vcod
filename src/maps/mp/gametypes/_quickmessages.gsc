@@ -686,7 +686,7 @@ quickresponses(response)
 				break;
 
 			case "3":
-				soundalias = "russian_no_sir";
+				soundalias = "russian_on_my_way";
 				saytext = &"QUICKMESSAGE_ON_MY_WAY";
 				//saytext = "On my way.";
 				break;

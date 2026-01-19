@@ -159,8 +159,10 @@ print()
       logprint("game[playerstats]["+i+"][assists]     = " + data["assists"] + "\n");
       logprint("game[playerstats]["+i+"][deaths]      = " + data["deaths"] + "\n");
       logprint("game[playerstats]["+i+"][adr]         = " + data["adr"] + "\n");
+      logprint("game[playerstats]["+i+"][adr_lateUpdate]         = " + data["adr_lateUpdate"] + "\n");
       logprint("game[playerstats]["+i+"][damage]      = " + data["damage"] + "\n");
       logprint("game[playerstats]["+i+"][grenade_damage] = " + data["grenade_damage"] + "\n");
+      logprint("game[playerstats]["+i+"][grenade_damage_lateUpdate] = " + data["grenade_damage_lateUpdate"] + "\n");
       logprint("game[playerstats]["+i+"][grenades]    = " + data["grenades"] + "\n");
       logprint("game[playerstats]["+i+"][plants]      = " + data["plants"] + "\n");
       logprint("game[playerstats]["+i+"][defuses]     = " + data["defuses"] + "\n");
@@ -242,8 +244,10 @@ onConnected()
 			game["playerstats"][newIndex]["assists"] = 0;
       game["playerstats"][newIndex]["deaths"] = 0;
       game["playerstats"][newIndex]["adr"] = 0.0;
+      game["playerstats"][newIndex]["adr_lateUpdate"] = 0.0;
       game["playerstats"][newIndex]["damage"] = 0;
       game["playerstats"][newIndex]["grenade_damage"] = 0;
+      game["playerstats"][newIndex]["grenade_damage_lateUpdate"] = 0;
 			game["playerstats"][newIndex]["grenades"] = 0;
 			game["playerstats"][newIndex]["plants"] = 0;
 			game["playerstats"][newIndex]["defuses"] = 0;
@@ -412,6 +416,20 @@ CalculateAdr()
     {
       game["playerstats"][dataId]["adr"] = game["playerstats"][dataId]["damage"]/(totalRoundsPlayed*1.0);
       logprint(game["playerstats"][dataId]["name"] + ", adr=" + game["playerstats"][dataId]["adr"] + ", dmg=" + game["playerstats"][dataId]["damage"] + "\n");
+    }
+  }
+}
+
+UpdateAdrAndGrenadeDamageWhenRoundIsOver()
+{
+  logprint("_player_stat:: UpdateAdrAndGrenadeDamageWhenRoundIsOver\n");
+  for (i = 0; i < game["playerstats"].size; i++)
+  {
+    if (game["playerstats"][i]["deleted"] == false)
+    {
+      game["playerstats"][i]["adr_lateUpdate"] = game["playerstats"][i]["adr"];
+      game["playerstats"][i]["grenade_damage_lateUpdate"] = game["playerstats"][i]["grenade_damage"];
+      // logprint(game["playerstats"][i]["name"] + ", adr_lateUpdate=" + game["playerstats"][i]["adr_lateUpdate"] + ", grenade_damage_lateUpdate=" + game["playerstats"][i]["grenade_damage_lateUpdate"] + "\n");
     }
   }
 }
