@@ -1,14 +1,22 @@
-/*
-Ambient sounds made by Intuitive-Gaming.com
+/**	REISSUE Project Ares Mod version 1.15
+ * 
+ * 	Original map & script by ** IW **
+ * 	Edits by reissue_
+ * 
+ * 	********* PLAY HARD, GO PRO **********
 */
 
 main()
 {
-	setCullFog (0, 7500, .32, .36, .40, 0);
-	thread pam_ambientsounds();
+////	setCullFog (0, 7500, .32, .36, .40, 0);
+//	ambientPlay("ambient_mp_depot");
+
+	maps\mp\_rpam_maps_mp::main();		// start this for ambient sound / fog / improvements
+
 
 	maps\mp\_load::main();
-	maps\mp\mp_depot_fx::main();
+//	maps\mp\mp_depot_fx::main();	// bomb explosion precache
+
 
 	game["allies"] = "british";
 	game["axis"] = "german";
@@ -67,13 +75,5 @@ main()
 		radio.origin = (-1778, -2002, 40);
 		radio.angles = (0, 97, 0);
 		radio.targetname = "hqradio";
-	}
-}
-
-pam_ambientsounds()
-{
-	if (getcvar("rpam_ambientsounds") != "0")
-	{
-		ambientPlay("ambient_mp_depot");
 	}
 }

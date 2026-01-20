@@ -1,4 +1,4 @@
-/*
+/* 1
 This script implements new event system
 Basicly script that need do some action based on some event will register function for that event
 and if event happends, that function is called
@@ -34,7 +34,7 @@ Init()
 
 
 	// Print events only in developer mode
-	/#
+	/*
 	addListener("onStartGameType",    	::onStartGameType);
 
 	addListener("onConnecting",    		::onConnecting);
@@ -60,7 +60,7 @@ Init()
 	//addListener("onCvarChanged", ::onCvarChanged);
 
 	addListener("onMenuResponse",   	::onMenuResponse);
-	#/
+	*/
 }
 
 
@@ -398,9 +398,9 @@ _onMenuResponse()
 	{
 		self waittill("menuresponse", menu, response);
 
-		/#
+		/*
 		println("##### " + gettime() + " " + level.frame_num + " ##### menuresponse("+menu+", "+response+"): " + self.name);
-		#/
+		*/
 
 		// Process events
 		self thread _onMenuResponseCallEvents(menu, response);
@@ -432,12 +432,12 @@ _onMenuResponseCallEvents(menu, response)
 
 notifyCvarChange(cvar, value, isRegisterTime)
 {
-	/#
+	/*
 	if (!isDefined(value))
 	{
 		logprint("OnCvarChange: cvar=" + cvar + ", value = undefined, isRegisterTime="+isRegisterTime);
 	}
-	#/
+	*/
 	return_value = [];
 	for (i = 0; i < level.events.onCvarChanged.size; i++)
 		return_value[i] = level thread [[level.events.onCvarChanged[i]]](cvar, value, isRegisterTime);
@@ -446,9 +446,9 @@ notifyCvarChange(cvar, value, isRegisterTime)
 		if (isDefined(return_value[i]) && return_value[i])
 			return;
 
-	/#
+	/*
 	println("### Cvar " + cvar + " was registered, but is not handled in any function");
-	#/
+	*/
 }
 
 

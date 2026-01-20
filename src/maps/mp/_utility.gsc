@@ -1,3 +1,16 @@
+/*
+1
+  rPAMext Version: v14 (kvcodPAM v2.9)      
+   
+  Changes:     
+   
+  - rFIX_bombexplosiong: fix of a logprint which occurs error after bomb explodes
+
+
+
+
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 add_to_array(array, ent)
 {
 	if(!isdefined(ent))

@@ -1,14 +1,22 @@
-/*
-Ambient sounds made by Intuitive-Gaming.com
+/**	REISSUE Project Ares Mod version 1.15
+ * 
+ * 	Original map & script by ** IW **
+ * 	Edits by reissue_
+ * 
+ * 	********* PLAY HARD, GO PRO **********
 */
 
 main()
 {
 	//setExpFog(0.00025, .32, .36, .40, 0);
-	thread pam_ambientsounds();
+//	ambientPlay("ambient_mp_dawnville");
+
+	maps\mp\_rpam_maps_mp::main();		// start this for ambient sound / fog / improvements
+
 
 	maps\mp\_load::main();
-	maps\mp\mp_tigertown_fx::main();
+//	maps\mp\mp_tigertown_fx::main();	// precaches bomb explosion and smoke plumes
+
 
 	game["allies"] = "american";
 	game["axis"] = "german";
@@ -20,7 +28,7 @@ main()
 
 	game["attackers"] = "allies";
 	game["defenders"] = "axis";
-	
+
 	game["layoutimage"] = "mp_tigertown";
 
 	//retrival settings
@@ -38,13 +46,5 @@ main()
 		radios = getentarray ("hqradio","targetname");
 		for (i=0;i<radios.size;i++)
 			radios[i] hide();
-	}
-}
-
-pam_ambientsounds()
-{
-	if (getcvar("rpam_ambientsounds") != "0")
-	{
-		ambientPlay("ambient_mp_brecourt");
 	}
 }

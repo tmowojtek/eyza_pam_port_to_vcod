@@ -1,16 +1,24 @@
-/*
-Ambient sounds made by Intuitive-Gaming.com
+/**	REISSUE Project Ares Mod version 1.15
+ * 
+ * 	Original map & script by ** IW **
+ * 	Edits by reissue_
+ * 
+ * 	********* PLAY HARD, GO PRO **********
 */
 
 main()
 {
 //	setCullFog (0, 5500, .32, .36, .40, 0); //stormyfogged sky fog color
-	setCullFog (0, 6500, .8, .8, .8, 0);	//pavlovtest sky color
-	thread pam_ambientsounds();
+////	setCullFog (0, 6500, .8, .8, .8, 0);	//pavlovtest sky color		// was activated orig
+//	ambientPlay("ambient_mp_harbor");
+
+	maps\mp\_rpam_maps_mp::main();		// start this for ambient sound / fog / improvements
+
 
 	maps\mp\_load::main();
-	//maps\mp\mp_railyard_fx::main();
-	
+//	//maps\mp\mp_railyard_fx::main();	// was already deactivated
+
+
 	game["allies"] = "russian";
 	game["axis"] = "german";
 
@@ -62,18 +70,5 @@ main()
 		radio.origin = (-6932, -7395, 0);
 		radio.angles = (0, 153, 0);
 		radio.targetname = "hqradio";
-	}
-}
-
-pam_ambientsounds()
-{
-	if (getcvar("rpam_ambientsounds") != "0")
-	{
-		logprint("mp_harbor::pam_ambientsounds ON\n");
-		ambientPlay("ambient_mp_harbor");
-	} 
-	else 
-	{
-		logprint("mp_harbor::pam_ambientsounds OFF\n");
 	}
 }

@@ -1,15 +1,22 @@
-/*
-Ambient sounds made by Intuitive-Gaming.com
+/**	REISSUE Project Ares Mod version 1.15
+ * 
+ * 	Original map & script by ** IW **
+ * 	Edits by reissue_
+ * 
+ * 	********* PLAY HARD, GO PRO **********
 */
-
 
 main()
 {
-	setCullFog (0, 5000, .32, .36, .40, 0 );
-	thread pam_ambientsounds();
+////	setCullFog (0, 5000, .32, .36, .40, 0 );
+//	ambientPlay("ambient_mp_rocket");
+
+	maps\mp\_rpam_maps_mp::main();		// start this for ambient sound / fog / improvements
+
 
 	maps\mp\_load::main();
-	maps\mp\mp_hurtgen_fx::main();
+//	maps\mp\mp_hurtgen_fx::main();	// bomb explosion precache
+
 
 	game["allies"] = "american";
 	game["axis"] = "german";
@@ -21,7 +28,7 @@ main()
 
 	game["attackers"] = "allies";
 	game["defenders"] = "axis";
-	
+
 	game["layoutimage"] = "mp_hurtgen";
 
 	//retrival settings
@@ -34,7 +41,7 @@ main()
 	game["re_spectator_obj_text"] = (&"RE_OBJ_HURTGEN_OBJ_SPECTATOR");
 	game["re_attackers_intro_text"] = (&"RE_OBJ_HURTGEN_SPAWN_ATTAKER");
 	game["re_defenders_intro_text"] = (&"RE_OBJ_HURTGEN_SPAWN_DEFENDER");
-	
+
 	//hq settings
 	if (getcvar("g_gametype") == "hq")
 	{
@@ -62,13 +69,5 @@ main()
 		radio.origin = (4480, -2106, 74);
 		radio.angles = (0, 180, 0);
 		radio.targetname = "hqradio";
-	}
-}
-
-pam_ambientsounds()
-{
-	if (getcvar("rpam_ambientsounds") != "0")
-	{
-		ambientPlay("ambient_mp_rocket");
 	}
 }

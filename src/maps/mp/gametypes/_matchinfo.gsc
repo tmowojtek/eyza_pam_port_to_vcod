@@ -1,4 +1,16 @@
+/*
+  rPAMext Version: v19 (kvcodPAM v2.10)     
+1
+  Changes:
 
+  - rFIX_HLSW-CVAR-PLAYER-ERROR : Executing this code when joining a server causes an error (Global server cvars visible via HLSW).
+  - v23 old: player UpdatePlayerCvars();
+  - v24 new code
+  - v210 added line: if (isDefined(game["readyup_first_run_ending_for_matchinfo"]) && game["readyup_first_run_ending_for_matchinfo"])
+
+
+*/
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
 First we need to determine wich team will be first
  - do this by saving information who connect to this server first - his team will be first
@@ -11,10 +23,12 @@ Procces is splited to 2 parts
 Player names cannot be changed too much during match, othervise match info will reset
 
 */
-Init()
+init()
 {
+// Log
 	logprint("_matchinfo::init\n");
-	
+
+// Register	
 	maps\mp\gametypes\global\_global::addEventListener("onCvarChanged", ::onCvarChanged);
 
 	maps\mp\gametypes\global\_global::registerCvar("scr_matchinfo", "INT", 0, 0, 2);					// level.scr_matchinfo
@@ -23,10 +37,17 @@ Init()
 	maps\mp\gametypes\global\_global::addEventListener("onConnected",     ::onConnected);
 
 	// Save value of scr_matchinfo for entire map (if cvar scr_matchinfo is changed during match, it makes no effect until map change)
+//cod2
+//	firstMapRestart = false;
 	if (!isDefined(game["scr_matchinfo"]))
+//	{
 		game["scr_matchinfo"] = level.scr_matchinfo;
+//		firstMapRestart = true;
+//	}
+//	if (!isDefined(game["scr_matchinfo"]))
+//v26	game["scr_matchinfo"] = level.scr_matchinfo;
 
-	// Matchinfo cannot working without readyup...
+// Matchinfo cannot working without readyup...
 	if (!level.scr_readyup)
 		game["scr_matchinfo"] = 0;
 
@@ -46,24 +67,344 @@ Init()
 		game["match_totaltime_text"] = "";
 
 		game["match_round"] = "";
+//2		game["match_state"] = "";
 	}
 
-	// Natchinfo not possible, exit here
+//2	level.match_description = "";
+//2	level.match_description_players1 = "";
+//2	level.match_description_players2 = "";
+//2	level.match_description_playersUnknown = "";
+//2	level.match_missingPlayers = 0;
+//2	level.match_mixedPlayers = 0;
+//2	level.match_unjoinedPlayers = 0;
+
+// Matchinfo not possible, exit here
 	if (game["scr_matchinfo"] == 0)
 		return;
 
-	// Once match start, save teams
+// Once match start, save teams
 	if (!level.in_readyup)
 	{
 		game["match_exists"] = true;
 		game["match_teams_set"] = true;
 	}
+//2	
+//2	addEventListener("onConnecting",   ::onConnecting);
+//2	addEventListener("onDisconnect",   ::onDisconnect);
+//2	addEventListener("onStopGameType", ::onStopGameType);
+//2	addEventListener("onJoinedTeam",   ::onJoinedTeam);
+//2	addEventListener("onSpawned",      ::onSpawned);
+//2	thread onReadyupOver();
 
+//2	level thread refresh(firstMapRestart);
 
+//addEventListener cod1
 	maps\mp\gametypes\global\_global::addEventListener("onJoinedTeam",        ::onJoinedTeam);
 
 	level thread refresh();
 }
+
+//ADDED_ZPAM400T3_prepareMap()
+/*
+prepareMap()
+{
+// Save data from previous map
+	team1_winnedMaps = int(matchGetData("team1_winnedMaps")); // number of maps winned by team 1
+	team2_winnedMaps = int(matchGetData("team2_winnedMaps")); // number of maps winned by team 2
+	finishedMapsCount = int(matchGetData("finishedMapsCount")); // number of played maps
+	finishedMap1 = matchGetData("finishedMap1");
+	finishedMap2 = matchGetData("finishedMap2");
+	finishedMap3 = matchGetData("finishedMap3");
+	finishedMap4 = matchGetData("finishedMap4");
+	finishedMap5 = matchGetData("finishedMap5");
+
+// Clear data from previous map
+	matchClearData();
+
+// Restore data from previous map
+	matchSetData("team1_winnedMaps", team1_winnedMaps);
+	matchSetData("team2_winnedMaps", team2_winnedMaps);
+	matchSetData("finishedMapsCount", finishedMapsCount);
+	if (finishedMap1 != "") matchSetData("finishedMap1", finishedMap1);
+	if (finishedMap2 != "") matchSetData("finishedMap2", finishedMap2);
+	if (finishedMap3 != "") matchSetData("finishedMap3", finishedMap3);
+	if (finishedMap4 != "") matchSetData("finishedMap4", finishedMap4);
+	if (finishedMap5 != "") matchSetData("finishedMap5", finishedMap5);
+
+// Dont upload data on new map until RUP
+//uploadMatchData(false, true);
+}
+*/
+//ADDED_ZPAM400T3_finishMap()
+/*
+finishMap()
+{
+	// Load data from previous map
+	team1_winnedMaps = int(matchGetData("team1_winnedMaps")); // 0 if not defined
+	team2_winnedMaps = int(matchGetData("team2_winnedMaps")); // 0 if not defined
+	finishedMapsCount = int(matchGetData("finishedMapsCount")); // 0 if not defined
+	finishedMap1 = matchGetData("finishedMap1");
+	finishedMap2 = matchGetData("finishedMap2");
+	finishedMap3 = matchGetData("finishedMap3");
+	finishedMap4 = matchGetData("finishedMap4");
+	finishedMap5 = matchGetData("finishedMap5");
+
+	// Update data
+	finishedMapsCount++;
+	team1_score = int(game["match_team1_score"]);
+	team2_score = int(game["match_team2_score"]);
+	if (team1_score > team2_score) {
+		team1_winnedMaps++;
+	} else if (team2_score > team1_score) {
+		team2_winnedMaps++;
+	}
+
+	// Save data
+	matchSetData("team1_winnedMaps", team1_winnedMaps);
+	matchSetData("team2_winnedMaps", team2_winnedMaps);
+	matchSetData("finishedMapsCount", finishedMapsCount);
+	switch(finishedMapsCount) {
+		case 1: matchSetData("finishedMap1", level.mapname); break;
+		case 2: matchSetData("finishedMap2", level.mapname); break;
+		case 3: matchSetData("finishedMap3", level.mapname); break;
+		case 4: matchSetData("finishedMap4", level.mapname); break;
+		case 5: matchSetData("finishedMap5", level.mapname); break;
+	}
+
+	// Upload match data to master server
+	uploadMatchData("finishMap", false, false);
+}
+*/
+//ADDED_ZPAM400T3_endMap()
+/*
+endMap()
+{
+	team1_winnedMaps = int(matchGetData("team1_winnedMaps")); // 0 if not defined
+	team2_winnedMaps = int(matchGetData("team2_winnedMaps")); // 0 if not defined
+	format = matchGetData("format"); // BO1, BO3, BO5 (defined by CoD2x)
+	
+	matchFinished = false;
+	switch (format) {
+		default:
+		case "BO1":
+			matchFinished = true;
+			break;
+		case "BO3":
+			if (team1_winnedMaps >= 2 || team2_winnedMaps >= 2)
+				matchFinished = true;
+			break;
+		case "BO5":
+			if (team1_winnedMaps >= 3 || team2_winnedMaps >= 3)
+				matchFinished = true;
+			break;
+	}
+
+	if (matchFinished) {
+		matchFinish(); // kick all players, cancel match, fast_restart
+
+	} else {
+		maps = matchGetData("maps"); // might be empty
+
+		// Maps are defined
+		if (maps.size > 0) {
+			// Collect finished maps into an array
+			finishedMaps = [];
+			finishedMap1 = matchGetData("finishedMap1");  if (finishedMap1 != "") finishedMaps[finishedMaps.size] = finishedMap1;
+			finishedMap2 = matchGetData("finishedMap2");  if (finishedMap2 != "") finishedMaps[finishedMaps.size] = finishedMap2;
+			finishedMap3 = matchGetData("finishedMap3");  if (finishedMap3 != "") finishedMaps[finishedMaps.size] = finishedMap3;
+			finishedMap4 = matchGetData("finishedMap4");  if (finishedMap4 != "") finishedMaps[finishedMaps.size] = finishedMap4;
+			finishedMap5 = matchGetData("finishedMap5");  if (finishedMap5 != "") finishedMaps[finishedMaps.size] = finishedMap5;
+
+			// Find the first unplayed map in the maps array
+			nextMap = "";
+			for (i = 0; i < maps.size; i++) {
+				isPlayed = false;
+				for (j = 0; j < finishedMaps.size; j++) {
+					if (maps[i] == finishedMaps[j]) {
+						isPlayed = true;
+						break;
+					}
+				}
+				if (!isPlayed) {
+					nextMap = maps[i];
+					break;
+				}
+			}
+
+			// If all maps are played, fallback to first map
+			if (nextMap == "" && maps.size > 0) {
+				nextMap = maps[0];
+			}
+
+			map(nextMap, false);
+		
+		// Maps not defined, let players decide
+		} else {		
+			map_restart(false); // fast_restart
+		}
+	}
+}
+*/
+//ADDED_ZPAM400T3_canMapBeChanged()
+/*
+canMapBeChanged()
+{
+	if (matchIsActivated()) {
+
+		maps = matchGetData("maps"); // might be empty
+
+		allow = true;
+
+		// Maps are defined, cod2x set them into map_rotation, so disable map change / restart
+		if (maps.size > 0) {
+			allow = false;
+
+		// Maps are not defined, allow match change before first round ends
+		} else {	
+			switch(level.gametype) {
+				case "sd":				
+					if (game["state"] == "playing" && // will be false on interrmission when we want to allow map change
+						!game["readyup_first_run"] && // allow change in first readyup
+						(game["allies_score"] > 0 || game["axis_score"] > 0) // allow change if score is 0:0 (so in first round its still possible to change))
+					) {
+						allow = false;
+					}
+					break;
+				case "dm":
+					if (game["state"] == "playing" && // will be false on interrmission when we want to allow map change
+						!game["readyup_first_run"] // allow change in first readyup
+					) {
+						allow = false;
+					}
+					break;
+			}
+		}
+
+		if (!allow) {
+			iprint_to_team_players("^1Map change / restart is disabled during match!");
+			return false; // prevent map change / restart
+		}
+	}
+	return true;
+}
+*/
+//ADDED_ZPAM400T3_onStopGameType()
+/*
+// Called by code before map change, map restart, or server shutdown.
+//  fromScript: true if map change was triggered from a script, false if from a command.
+//  bComplete: true if map change or restart is complete, false if it's a round restart so persistent variables are kept.
+//  shutdown: true if the server is shutting down, false otherwise.
+//  source: "map", "fast_restart", "map_restart", "map_rotate", "shutdown"
+onStopGameType(fromScript, bComplete, shutdown, source) {
+
+	// Disable map change (if called via command, rcon for example)
+	if (fromScript == false && shutdown == false)
+	{
+		if (!canMapBeChanged())
+			return false; // prevent map change / restart
+	}
+}
+*/
+//ADDED_ZPAM400T3_uploadMatchData()
+/*
+uploadMatchData(debug, printSuccess, printError)
+{
+	if (!matchIsActivated()) {
+		return;
+	}
+
+	team1_score = "0";
+	team2_score = "0";
+	if (isDigitalNumber(game["match_team1_score"]))
+		team1_score = game["match_team1_score"];
+	if (isDigitalNumber(game["match_team2_score"]))
+		team2_score = game["match_team2_score"];
+
+	state = "playing";
+	if (game["state"] == "intermission") {
+		state = "finished";
+	}
+
+	// Set global data
+	matchSetData(
+		"team1_score", team1_score,
+		"team2_score", team2_score,
+		"map", level.mapname,
+		"round", game["match_round"],
+		"state", state,
+		"debug", debug
+	);
+
+	// Set player data
+	players = getentarray("player", "classname");
+	for(i = 0; i < players.size; i++)
+	{
+		player = players[i];
+
+		stats = player maps\mp\gametypes\_player_stat::getStats();
+		if (!isDefined(stats)) continue;
+		
+		if (level.gametype == "sd") {
+
+			player matchPlayerSetData(
+				"score", 	format_fractional(stats["score"], 1, 1),
+				"kills", 	stats["kills"],
+				"assists", 	stats["assists"],
+				"damage", 	format_fractional(stats["damage"] / 100, 1, 1),
+				"deaths", 	stats["deaths"],
+				"grenades", stats["grenades"],
+				"plants", 	stats["plants"],
+				"defuses", 	stats["defuses"]
+			);
+		} else if (level.gametype == "dm") {
+			player matchPlayerSetData(
+				"score", 	format_fractional(stats["score"], 1, 1),
+				"kills", 	stats["kills"],
+				"deaths", 	stats["deaths"]
+			);
+		} else {
+			player matchPlayerSetData(
+				"score", 	player.score,
+				"deaths", 	player.deaths
+			);
+		}
+	}
+
+	// Start upload
+	if (printSuccess && printError)
+		matchUploadData(::matchUploadDone, ::matchUploadError);
+	else if (printSuccess)
+		matchUploadData(::matchUploadDone, ::matchUploadErrorVoid);
+	else if (printError)
+		matchUploadData(::matchUploadDoneVoid, ::matchUploadError);
+	else
+		matchUploadData();
+
+}
+*/
+//ADDED_ZPAM400T3_uploadMatchData()
+/*
+matchUploadDoneVoid()
+{
+	iprint_to_team_players("^5MatchV data uploaded successfully.);
+}
+
+matchUploadDone()
+{
+	iprint_to_team_players("^2Match data uploaded successfully.");
+}
+
+matchUploadErrorVoid()
+{
+	iprint_to_team_players("^6ErrorV uploading match data: " + error");
+}
+
+matchUploadError(error)
+{
+	iprint_to_team_players("^1Error uploading match data: " + error);
+}
+*/
+
 
 // This function is called when cvar changes value.
 // Is also called when cvar is registered
@@ -77,35 +418,93 @@ onCvarChanged(cvar, value, isRegisterTime)
 		{
 			if (value == 1)
 			{
-				logprint("onCvarChanged before clear\n");
+// LOG
+				logprint("_matchinfo::onCvarChanged before clear\n");
 				clear();
-				logprint("onCvarChanged after clear\n");
+// LOG
+				logprint("_matchinfo::onCvarChanged after clear\n");
 				iprintln("Info about teams was cleared via rcon.");
 
 				maps\mp\gametypes\global\_global::changeCvarQuiet(cvar, 0);
 			}
-
 			return true;
 		}
-
+		//
 	}
 	return false;
 }
 
+//ADDED_ZPAM400T3_onConnecting(firstTime)
+/*
+onConnecting(firstTime)
+{
+	self endon("disconnect");
+
+	// Redownload match data when player is connecting to allow connect host that was added to team while match was already in progress
+	if (matchIsActivated() && firstTime)
+	{
+
+		// Make sure redownload is called only once in short period of time
+		level notify("matchinfo_data_redownload");
+		level endon("matchinfo_data_redownload");
+
+		wait level.fps_multiplier * 1;
+		
+		matchRedownloadData();
+	}
+}
+*/
+//ADDED_ZPAM400T3_iprint_to_team_players(text)
+/*
+iprint_to_team_players(text)
+{
+	players = getentarray("player", "classname");
+	for(i = 0; i < players.size; i++)
+	{
+		player = players[i];
+		if (isDefined(player.pers["team"]) && player.pers["team"] != "streamer")
+		{
+			player iPrintLn(text);
+		}
+	}
+}
+*/
 
 onConnected()
 {
+// LOG
 	logprint("_matchinfo::onConnected start\n");
+	
+// Endon
 	self endon("disconnect");
 
-	// Ingame match info bar
+// Ingame match info bar
 	if (!isDefined(self.pers["matchinfo_ingame"]))
 	{
 		// By default show match info ingame
 		self.pers["matchinfo_ingame"] = false;
 		self.pers["matchinfo_ingame_visible"] = false;
+//2		self.pers["matchinfo_matchDataWarningShowed"] = false;
+//2		self.pers["matchinfo_nickWarningLastTime"] = 0;
+//2		self.pers["matchinfo_error"] = "";
+//2		self.pers["matchinfo_color"] = "";
+//2
+//2		// Show warning about unknown player
+//2		if (matchIsActivated())
+//2		{
+//2			if (self matchPlayerIsAllowed() == false) {
+//2				if (self matchPlayerGetData("uuid") == "")
+//2					iprint_to_team_players(self.name + "^1 is not logged into the match!");
+//2				else
+//2					iprint_to_team_players(self.name + "^1 is not assigned to any team!");
+//2			} else {
+//2				//iprint_to_team_players(self.name + "^7's name: " + self matchPlayerGetData("name"));
+//2				//iprint_to_team_players(self.name + "^7's team: " + self matchPlayerGetData("team_name"));
+//2			}
+//2		}
 	}
 
+//2	level thread generateMatchDescriptionDebounced();
 
 	if (game["scr_matchinfo"] > 0)
 	{
@@ -121,6 +520,7 @@ onConnected()
 			//waittillframeend;
 			wait 0.05;
 			// Update team names in scoreboard
+//2			self updateScoreboardTeamNames();
 			self updateTeamNames();
 		}
 	}
@@ -129,9 +529,11 @@ onConnected()
 		wait level.fps_multiplier * 0.2;
 		self maps\mp\gametypes\global\_global::setClientCvar2("ui_matchinfo_show", "0");
 	}
+// LOG
 	logprint("_matchinfo::onConnected end\n");
 }
 
+////////////end cod2 transfer
 onJoinedTeam(teamName)
 {
 	// Always hide ingame menu for streamer as they have own menu
@@ -709,7 +1111,7 @@ refresh()
 	// On first run, offset thread from ther thread and this also make sure game["allies_score"] is defined
 	wait level.frame * 8; // offset thread from other threads
 
-
+//v210
 	for (;;)
 	{
 		/***********************************************************************************************************************************
@@ -727,7 +1129,7 @@ refresh()
 					determineTeamByHistoryCvars();
 				else
 					if (isDefined(game["readyup_first_run_ending_for_matchinfo"]) && game["readyup_first_run_ending_for_matchinfo"])
-						determineTeamByFirstConnected();
+					determineTeamByFirstConnected();
 
 				// for all players change team name in scoreboard
 				players = getentarray("player", "classname");
@@ -868,8 +1270,9 @@ refresh()
 			game["match_round"] += " (OT)"; // overtime
 
 
-
-
+//rFIX_HLSW-CVAR-PLAYER-ERROR
+// Executing this code when joining a server causes an error (Global server cvars visible via HLSW).
+/*
 		// Global server cvars visible via HLSW
 		if (game["match_team1_name"] != "") 	maps\mp\gametypes\global\_global::setCvarIfChanged("_match_team1", game["match_team1_name"]);
 		else					maps\mp\gametypes\global\_global::setCvarIfChanged("_match_team1", "-");
@@ -881,8 +1284,8 @@ refresh()
 
 		if (game["match_round"] != "") 		maps\mp\gametypes\global\_global::setCvarIfChanged("_match_round", game["match_round"]);
 		else					maps\mp\gametypes\global\_global::setCvarIfChanged("_match_round", "-");
-
-
+*/
+//--
 		thread UpdateCvarsForPlayers();
 
 

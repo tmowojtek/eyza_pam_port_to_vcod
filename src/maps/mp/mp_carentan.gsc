@@ -1,20 +1,22 @@
-/*
-Ambient sounds made by Intuitive-Gaming.com
+/**	REISSUE Project Ares Mod version 1.15
+ * 
+ * 	Original map & script by ** IW **
+ * 	Edits by reissue_
+ * 
+ * 	********* PLAY HARD, GO PRO **********
 */
 
 main()
 {
-	setCullFog (0, 16500, 0.7, 0.85, 1.0, 0);
-	thread pam_ambientsounds();
-	
-	// set the nighttime flag to be off
-	setcvar("sv_night", "0" );
+//	setCullFog (0, 16500, 0.7, 0.85, 1.0, 0);
+//	ambientPlay("ambient_mp_brecourt");
+
+	maps\mp\_rpam_maps_mp::main();		// start this for ambient sound / fog / improvements
+
 
 	maps\mp\_load::main();
-	maps\mp\mp_carentan_fx::main();
-	maps\mp\mp_carentan::layout_images();
+//	maps\mp\mp_carentan_fx::main();		// bomb explosion precache
 
-	remove_me_ctf();
 
 	game["allies"] = "american";
 	game["axis"] = "german";
@@ -27,10 +29,8 @@ main()
 	game["attackers"] = "allies";
 	game["defenders"] = "axis";
 	
-	game["hud_allies_victory_image"] = "gfx/hud/hud@mp_victory_carentan_us.dds";
-	game["hud_axis_victory_image"] = "gfx/hud/hud@mp_victory_carentan_g.dds";
-	
 	game["layoutimage"] = "mp_carentan";
+
 
 	//retrival settings
 	level.obj["Code Book"] = (&"RE_OBJ_CODE_BOOK");
@@ -74,39 +74,5 @@ main()
 		radio.origin = (837, 3637, -16);
 		radio.angles = (0, 90, 0);
 		radio.targetname = "hqradio";
-	}
-	
-	// FOR BUILDING PAK FILES ONLY
-	if (getcvar("fs_copyfiles") == "1")
-	{
-		precacheShader(game["dom_layoutimage"]);
-		precacheShader(game["ctf_layoutimage"]);
-//		precacheShader(game["bas_layoutimage"]);
-		precacheShader(game["layoutimage"]);
-		precacheShader(game["hud_allies_victory_image"]);
-		precacheShader(game["hud_axis_victory_image"]);
-	}
-}
-
-layout_images()
-{
-	game["ctf_layoutimage"] = "mp_carentan_ctf";
-	game["layoutimage"] = "mp_carentan";
-}
-
-remove_me_ctf()
-{
-	if (getcvar("g_gametype") == "ctf")
-	{
-		mg42 = getent("remove_me_42","targetname");
-		mg42 delete();
-	}
-}
-
-pam_ambientsounds()
-{
-	if (getcvar("rpam_ambientsounds") != "0")
-	{
-		ambientPlay("ambient_mp_carentan");
 	}
 }

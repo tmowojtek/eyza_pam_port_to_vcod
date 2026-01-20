@@ -1,10 +1,21 @@
+/*
+  rPAMext Version: v19 (kvcodPAM v2.10)     
+1
+  Changes:     
 
+  - rkmVersion: Displays the actual version
+
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 init()
 {
 	logprint("_pam::init\n");
 	if(game["firstInit"])
 	{
-		maps\mp\gametypes\global\_global::precacheString2("STRING_VERSION_INFO", &"zPAM 3.34 for vCoD"); // ZPAM_RENAME
+// rkmVersion
+//		maps\mp\gametypes\global\_global::precacheString2("STRING_VERSION_INFO", &"zPAM 3.34 for vCoD"); // ZPAM_RENAME
+		maps\mp\gametypes\global\_global::precacheString2("STRING_VERSION_INFO", &"rPAM & kvcodPAM v2.11-20");
+
 	}
 }
 

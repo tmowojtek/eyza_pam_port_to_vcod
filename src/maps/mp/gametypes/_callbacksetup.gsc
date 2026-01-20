@@ -1,8 +1,10 @@
+// changed # to *
+//
 //	Callback Setup
 //	This script provides the hooks from code into script for the gametype callback functions.
 
 /*
-	Order of loading scripts:
+1	Order of loading scripts:
 
 		1. Init game cvars:
 			\fs_game\PAM2016\g_antilag\1\g_gametype\sd\gamename\Call of Duty 2\mapname\mp_toujane\protocol\118\shortversion\1.3\sv_allowAnonymous\0\sv_floodProtect\1\sv_hostname\CoD2Host\sv_maxclients\20\sv_maxPing\0\sv_maxRate\0\sv_minPing\0\sv_privateClients\0\sv_punkbuster\0\sv_pure\1\sv_voice\0
@@ -93,9 +95,9 @@ Called by code after the level's main script function has run.
 ================*/
 CodeCallback_StartGameType()
 {
-	/#
+	/*
 	println("##### " + gettime() + " " + level.frame_num + " ##### Call: maps/mp/gametypes/_callback.gsc::CodeCallback_StartGameType()");
-	#/
+	*/
 
 	logprint("##### " + gettime() + " ##### Call: maps/mp/gametypes/_callback.gsc::CodeCallback_StartGameType()\n");
 
@@ -145,12 +147,12 @@ CodeCallback_PlayerConnect()
 {
 	self endon("disconnect");
 
-	// /#
+	// /*
 	//if (isDefined(self.alreadyConnected))
 	//	assertMsg("Duplicated connection for " + self.name);
 	//self.alreadyConnected = true;
 	// println("##### " + gettime() + " " + level.frame_num + " ##### Connecting: " + self.name);
-	// #/
+	// */
 
 	self.sessionteam = "none"; // show player in "none" team in scoreboard while connecting
 
@@ -159,9 +161,9 @@ CodeCallback_PlayerConnect()
 	// Wait here until player is fully connected
 	self waittill("begin");
 
-	/#
+	/*
 	println("##### " + gettime() + " " + level.frame_num + " ##### Connected: " + self.name);
-	#/
+	*/
 
 	//self thread emptyName();
 
@@ -233,9 +235,9 @@ CodeCallback_PlayerDisconnect()
 {
 	self notify("disconnect");
 
-	/#
+	/*
 	println("##### " + gettime() + " " + level.frame_num + " ##### Disconnected: " + self.name);
-	#/
+	*/
 	
 	self thread maps\mp\gametypes\global\events::notifyDisconnect();
 }
@@ -296,14 +298,14 @@ CodeCallback_PlayerDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath
 			self iprintln("You recieved " + iDamage + " damage (" + sHitLoc + ", "+ sMeansOfDeath +")");
 	}
 
-	// /#
+	// /*
 	// dist = -1; if (isDefined(eAttacker) && isPlayer(eAttacker)) dist = (int)(distance(self getOrigin(), eAttacker getOrigin()));
 	// strAttacker = "undefined"; if (isDefined(eAttacker)) if (isPlayer(eAttacker)) strAttacker = "#" + (eAttacker getEntityNumber()) + " " + eAttacker.name; else strAttacker = "-entity-";
 	// sPoint = "undefined";	if (isDefined(vPoint)) sPoint = vPoint;
 
 	// println("##### " + gettime() + " " + level.frame_num + " ##### PlayerDamage: " + strAttacker + " -> #" + self getEntityNumber() + " " + self.name + " health:" + self.health + " damage:" + iDamage + " hitLoc:" + sHitLoc + " iDFlags:" + iDFlags +
 	// " sMeansOfDeath:" + sMeansOfDeath + " sWeapon:" + sWeapon + " vPoint:" + sPoint + " distance:" + dist);
-	// #/
+	// */
 
 
 	// Protection - players in spectator inflict damage
@@ -477,11 +479,11 @@ CodeCallback_PlayerKilled(eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon
 	// Resets the infinite loop check timer, to prevent an incorrect infinite loop error when a lot of script must be run
 	resettimeout();
 
-	/#
+	/*
 	strAttacker = "undefined"; if (isDefined(eAttacker)) if (isPlayer(eAttacker)) strAttacker = "#" + (eAttacker getEntityNumber()) + " " + eAttacker.name; else strAttacker = "-entity-";
 	println("##### " + gettime() + " " + level.frame_num + " ##### PlayerKilled: " + strAttacker + " -> #" + self getEntityNumber() + " " + self.name + " health:" + self.health + " damage:" + iDamage + " hitLoc:" + sHitLoc +
 	" sMeansOfDeath:" + sMeansOfDeath + " sWeapon:" + sWeapon + " sessionstate:" + self.sessionstate + " timeOffset:" + timeOffset);
-	#/
+	*/
 
 	// Player in spectator cannot be killed
 	if(self.sessionteam == "spectator")
