@@ -116,6 +116,8 @@ registerCvars()
 	[[var]]("scr_shotgun_consistent", "BOOL", 0);	// level.scr_shotgun_consistent
 	[[var]]("scr_hitbox_hand_fix", "BOOL", 0);	// level.scr_hitbox_hand_fix
 	[[var]]("scr_hitbox_torso_fix", "BOOL", 0);		// level.scr_hitbox_torso_fix
+	
+	[[var]]("scr_drophealth", "BOOL", 1);
 }
 
 
@@ -923,6 +925,7 @@ dropWeapons()
 	self thread dropWeapon();
 	self thread dropNade();
 	self thread dropSmoke();
+	self thread dropHealth();
 }
 
 dropWeapon()
@@ -1085,6 +1088,23 @@ dropSmoke()
 			level maps\mp\gametypes\_weapon_drop::handleWeaponDrop(grenadeType, self);
 		}
 	}
+}
+
+dropHealth()
+{
+	if ( !getcvarint("scr_drophealth") )
+		return;
+		
+	if(isDefined(level.healthqueue[level.healthqueuecurrent]))
+		level.healthqueue[level.healthqueuecurrent] delete();
+	
+	level.healthqueue[level.healthqueuecurrent] = spawn("item_health", self.origin + (0, 0, 1));
+	level.healthqueue[level.healthqueuecurrent].angles = (0, randomint(360), 0);
+
+	level.healthqueuecurrent++;
+	
+	if(level.healthqueuecurrent >= 16)
+		level.healthqueuecurrent = 0;
 }
 
 // Get number of greandes based on selected weapon

@@ -16,6 +16,8 @@ Init()
 	//precacheStatusIcon("hud_status_connecting");
 	precacheStatusIcon("gfx/hud/hud@status_connecting.tga");
 	precacheStatusIcon("gfx/hud/headicon@re_objcarrier.tga");
+	
+	precacheItem("item_health"); //Health pack
 
 	precacheString2("STRING_EMPTY", &" ");
 }

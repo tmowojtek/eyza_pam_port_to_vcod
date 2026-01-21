@@ -235,6 +235,7 @@ GetCvars(arr)
 
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_shellshock", 0);
 	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_battlerank", 1);
+	arr = maps\mp\gametypes\global\_global::ruleCvarDefault(arr, "scr_drophealth", 1);
 
 	return arr;
 }
