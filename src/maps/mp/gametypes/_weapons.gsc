@@ -925,7 +925,7 @@ dropWeapons()
 	self thread dropWeapon();
 	self thread dropNade();
 	self thread dropSmoke();
-	self thread dropHealth();
+	self dropHealth();
 }
 
 dropWeapon()
