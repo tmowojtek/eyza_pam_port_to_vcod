@@ -10,6 +10,9 @@ init()
 	maps\mp\gametypes\global\_global::addEventListener("onStartGameType", ::onStartGameType);
 
 	level.scr_smoke_fix = false;
+
+	level.healthqueue = [];
+	level.healthqueuecurrent = 0;
 }
 
 // Called from start_gametype when registring cvars

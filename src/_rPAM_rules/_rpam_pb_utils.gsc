@@ -14,6 +14,7 @@ Load_PB_Config()
 
 	pam_mode = getcvar("pam_mode");
 	pb_config = getcvar("pb_sv_config");
+	logprint("_rpam_pb_utils::Load_PB_Config pam_mode=" + pam_mode + ", pb_config=" + pb_config + "\n");
 
 	switch (pam_mode)
 	{
@@ -79,6 +80,7 @@ Load_PB_Config()
 
 Announce_PB_Loading()
 {
+	logprint("_rpam_pb_utils::Announce_PB_Loading start\n");
 	exec("_rPAM_rules/pb/PBConfigs/announce.cfg");
 	wait 3;
 }
