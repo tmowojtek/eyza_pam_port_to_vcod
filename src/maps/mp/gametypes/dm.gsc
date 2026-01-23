@@ -372,6 +372,8 @@ onAfterPlayerDamaged(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWe
 		// self thread maps\mp\gametypes\_shellshock::shellshockOnDamage(sMeansOfDeath, iDamage);
 	}
 
+	self maps\mp\gametypes\_shellshock_gmi::DoShellShock(sWeapon, sMeansOfDeath, sHitLoc, iDamage);
+
 	// LOG stuff
 	if(self.sessionstate != "dead")
 		maps\mp\gametypes\_log::logDamage(self, eAttacker, sWeapon, iDamage, sMeansOfDeath, sHitLoc, false);

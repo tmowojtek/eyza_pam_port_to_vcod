@@ -474,8 +474,8 @@ addPlayerLine(team, stats)
 
 			grenade_damage = stats["grenade_damage_lateUpdate"];
 			grenade_damage_color = "";
-			if (grenade_damage >= 500) grenade_damage_color = "^3";  // yellow
-			if (grenade_damage >= 1000) grenade_damage_color = "^1"; // red
+			if (grenade_damage >= 300) grenade_damage_color = "^3";  // yellow
+			if (grenade_damage >= 600) grenade_damage_color = "^1"; // red
 			grenade_damage = grenade_damage_color + grenade_damage;
 
 			plants = stats["plants"];

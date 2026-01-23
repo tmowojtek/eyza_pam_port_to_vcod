@@ -61,6 +61,7 @@ Load_PB_Config()
 
 	while (getcvar("pb_sv_loaded") == "0")
 	{
+		logprint("_rpam_pb_utils::Load_PB_Config test almost infinite loop\n");
 		wait 1;
 	}
 
