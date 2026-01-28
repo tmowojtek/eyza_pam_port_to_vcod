@@ -725,6 +725,7 @@ fill_box(index, barSide, teamname, player)
 	smokes = 0;
 	playerIsReady = false;
 	playerName = undefined;
+	roundKills = 0;
 	if (isDefined(player)) 
 	{
 		playerHealth = player.health;
@@ -737,6 +738,7 @@ fill_box(index, barSide, teamname, player)
 		smokes = player maps\mp\gametypes\_weapons::getSmokeGrenadeCount();
 		playerIsReady = player.isReady;
 		playerName = player.name;
+		roundKills = player.pers["round_kills"];
 	}
 
 	teamNum = "1";
@@ -830,10 +832,10 @@ fill_box(index, barSide, teamname, player)
 
 	// Kills in round
 	kills_added = "";
-	if (isDefined(player.pers["round_kills"]) && player.pers["round_kills"] != 0 && inStatsMode == false)
+	if (roundKills != 0 && inStatsMode == false)
 	{
-		if (player.pers["round_kills"] > 0) 	kills_added = "^2+" + player.pers["round_kills"] + "^7";
-		else					kills_added = "^1" + player.pers["round_kills"] + "^7";
+		if (roundKills > 0) 	kills_added = "^2+" + roundKills + "^7";
+		else					kills_added = "^1" + roundKills + "^7";
 	}
 
 

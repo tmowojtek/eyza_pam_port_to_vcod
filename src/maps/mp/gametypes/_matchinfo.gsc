@@ -666,7 +666,7 @@ UpdateCvarsForPlayers()
 
 		if (isDefined(player.pers["team"]) && player.pers["team"] == "streamer")
 		{
-			// logprint("_matchinfo::UpdateCvarsForPlayers for streamer\n");
+			logprint("_matchinfo::UpdateCvarsForPlayers for streamer\n");
 			player UpdatePlayerCvars();
 		}
 	}
