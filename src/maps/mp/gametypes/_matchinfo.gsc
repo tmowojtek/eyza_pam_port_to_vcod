@@ -299,6 +299,8 @@ refreshTeamNames()
 
 determineTeamByHistoryCvars()
 {
+	logprint("_matchinfo::determineTeamByHistoryCvars\n");
+	
 	refreshTeamNames();
 
 	// Fill team names
@@ -363,6 +365,7 @@ determineTeamByFirstConnected()
 
 resetAll()
 {
+	logprint("_matchinfo::resetAll\n");
 	setCvar("sv_map_name", "");
 	setCvar("sv_map_team1", "");
 	setCvar("sv_map_team2", "");
@@ -676,6 +679,8 @@ UpdateCvarsForPlayers()
 
 refresh()
 {
+	logprint("_matchinfo::refresh() start\n");
+
 	// Save previous map score to map history
 	if (!isDefined(game["match_previous_map_processed"]))
 	{
@@ -724,7 +729,8 @@ refresh()
 			{
 				// If match exists, load teams from cvars. Othervise load team by first connected player
 				if (game["match_exists"])
-					determineTeamByHistoryCvars();
+					if (isDefined(game["readyup_first_run_ending_for_matchinfo"]) && game["readyup_first_run_ending_for_matchinfo"])
+						determineTeamByHistoryCvars();
 				else
 					if (isDefined(game["readyup_first_run_ending_for_matchinfo"]) && game["readyup_first_run_ending_for_matchinfo"])
 						determineTeamByFirstConnected();

@@ -717,6 +717,8 @@ getPlayersByTeam(teamname)
 
 fill_box(index, barSide, teamname, player)
 {
+	score = 0;
+	deaths = 0;
 	playerHealth = 0;
 	weapon1 = "none";
 	weapon2 = "none";
@@ -728,6 +730,8 @@ fill_box(index, barSide, teamname, player)
 	roundKills = 0;
 	if (isDefined(player)) 
 	{
+		score = player.score;
+		deaths = player.deaths;
 		playerHealth = player.health;
 		weapon1 = player getweaponslotweapon("primary");
     	weapon2 = player getweaponslotweapon("primaryb");
@@ -738,7 +742,10 @@ fill_box(index, barSide, teamname, player)
 		smokes = player maps\mp\gametypes\_weapons::getSmokeGrenadeCount();
 		playerIsReady = player.isReady;
 		playerName = player.name;
-		roundKills = player.pers["round_kills"];
+		if (isDefined(player.pers["round_kills"]))
+		{
+			roundKills = player.pers["round_kills"];
+		}
 	}
 
 	teamNum = "1";
@@ -860,7 +867,7 @@ fill_box(index, barSide, teamname, player)
 	//self maps\mp\gametypes\global\_global::setClientCvarIfChanged("ui_streamersystem_team"+teamNum+"_player"+index+"_num",		(index+1));
 	self maps\mp\gametypes\global\_global::setClientCvarIfChanged("ui_streamersystem_team"+teamNum+"_player"+index+"_health",		health);
 	self maps\mp\gametypes\global\_global::setClientCvarIfChanged("ui_streamersystem_team"+teamNum+"_player"+index+"_name",		name);
-	self maps\mp\gametypes\global\_global::setClientCvarIfChanged("ui_streamersystem_team"+teamNum+"_player"+index+"_score",		player.score + " / " + player.deaths);
+	self maps\mp\gametypes\global\_global::setClientCvarIfChanged("ui_streamersystem_team"+teamNum+"_player"+index+"_score",		score + " / " + deaths);
 	self maps\mp\gametypes\global\_global::setClientCvarIfChanged("ui_streamersystem_team"+teamNum+"_player"+index+"_weapon",		weapon_text);
 	self maps\mp\gametypes\global\_global::setClientCvarIfChanged("ui_streamersystem_team"+teamNum+"_player"+index+"_round_kills",	kills_added);
 	self maps\mp\gametypes\global\_global::setClientCvarIfChanged("ui_streamersystem_team"+teamNum+"_player"+index+"_icons",		icons);
