@@ -89,7 +89,7 @@ onConnected()
 	self createPlayerScoreHUD();
 
 	// Set score into hud elemtns
-	self thread updatePlayerHUD();
+	self updatePlayerHUD();
 
 	// Show score by default
 	//self showScore();

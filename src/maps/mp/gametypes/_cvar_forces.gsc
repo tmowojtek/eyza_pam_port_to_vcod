@@ -31,6 +31,8 @@ onConnected()
 competitiveQuality()
 {
 	self endon("disconnect");
+	self notify("cvar_forces_competitiveQuality");
+	self endon("cvar_forces_competitiveQuality");
 
 	// Wait till player join team to save sent cvars to client
 	while (!isDefined(self.pers["firstTeamSelected"]))
