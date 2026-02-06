@@ -814,9 +814,9 @@ onPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHit
 			if (!level.in_readyup /*&& level.roundstarted && !level.roundended*/)
 			{
 				attacker maps\mp\gametypes\_player_stat::AddScore(-1);
-				attacker maps\mp\gametypes\_player_stat::AddTeamKill();
+				//attacker maps\mp\gametypes\_player_stat::AddTeamKill();
 
-				logprint("_sd::onPlayerKilled decreasing attacker " + attacker.name + " stats\n");
+				logprint("_sd::onPlayerKilled UO version: NOT decreasing attacker " + attacker.name + " kill stats\n");
 			}
 		}
 		else
@@ -933,9 +933,9 @@ onAfterPlayerKilled(eInflictor, attacker, iDamage, sMeansOfDeath, sWeapon, vDir,
 
 			if(self.pers["team"] == attacker.pers["team"]) // killed by a friendly
 			{
-				attacker.pers["score"]--;
+				//attacker.pers["score"]--;
 				attacker.score = attacker.pers["score"];
-				attacker.pers["round_kills"]--;
+				//attacker.pers["round_kills"]--;
 			}
 			else
 			{
