@@ -23,7 +23,7 @@ onConnectedAll()
 	logprint("_weapon_limiter::onConnectedAll start\n");
 	wait 0.05;
 
-	level thread onStratimeOver();
+	// level thread onStratimeOver();
 
 	level thread Update_All_Weapon_Limits();
 	//level thread Update_All_Pistol();
