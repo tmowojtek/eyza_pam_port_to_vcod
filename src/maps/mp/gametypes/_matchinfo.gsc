@@ -525,7 +525,7 @@ UpdatePlayerCvars()
 {
 	self endon("disconnect");
 
-	logprint("_matchinfo::UpdatePlayerCvars start\n");
+	// logprint("_matchinfo::UpdatePlayerCvars start\n");
 
 	if (game["scr_matchinfo"] > 0)
 	{
@@ -670,7 +670,7 @@ UpdatePlayerCvars()
 		self maps\mp\gametypes\global\_global::setClientCvarIfChanged("ui_matchinfo_matchtime", "");
 	}
 	
-	logprint("_matchinfo::UpdatePlayerCvars start\n");
+	// logprint("_matchinfo::UpdatePlayerCvars end\n");
 }
 
 
