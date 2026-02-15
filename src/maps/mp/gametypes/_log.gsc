@@ -11,7 +11,7 @@ init()
     //level thread onDamage();
     //level thread onPlayerKilled();
 
-    level thread onRoundEnd();
+    // level thread onRoundEnd();
 
     // level thread onServerRestart();
 }
@@ -205,4 +205,32 @@ onRoundEnd()
 
     	logPrint("Score;allies;" + getTeamScore("allies") + ";axis;" + getTeamScore("axis") + "\n");
     }
+}
+
+logRoundEnd(roundwinner)
+{
+    wait 0.05; // wait to complete kill log
+
+    logPrint("RoundEnd;\n");
+
+    roundlooser = "axis";
+    if (roundwinner == "axis")
+        roundlooser = "allies";
+
+    winners = "";
+    losers = "";
+
+    players = getentarray("player", "classname");
+    for(i = 0; i < players.size; i++)
+    {
+        lpGuid = players[i] getGuid();
+        if((isdefined(players[i].pers["team"])) && (players[i].pers["team"] == roundwinner))
+            winners = (winners + ";" + lpGuid + ";" + players[i].name);
+        else if((isdefined(players[i].pers["team"])) && (players[i].pers["team"] == roundlooser))
+            losers = (losers + ";" + lpGuid + ";" + players[i].name);
+    }
+    logPrint("Winners;"+roundwinner + winners + "\n");
+    logPrint("Losers;"+roundlooser + losers + "\n");
+
+    logPrint("Score;allies;" + getTeamScore("allies") + ";axis;" + getTeamScore("axis") + "\n");
 }

@@ -1993,7 +1993,8 @@ endRound(roundwinner)
 	level maps\mp\gametypes\_hud_teamscore::updateScore();
 
 	// LOG stuff
-	level notify("log_round_end", roundwinner);
+	//level notify("log_round_end", roundwinner);
+	level maps\mp\gametypes\_log::logRoundEnd(roundwinner);
 
 
 	// Increase played rounds

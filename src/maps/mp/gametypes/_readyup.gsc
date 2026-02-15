@@ -877,7 +877,6 @@ End_Readyup_Mode()
 
 	game["readyup_first_run_ending_for_matchinfo"] = true;
 
-
 	wait level.fps_multiplier * level.scr_readyup_start_timer; // (10sec)
 
 	// reset flag as readyup was runned

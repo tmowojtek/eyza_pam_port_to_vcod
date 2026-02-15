@@ -82,7 +82,7 @@ onConnectedAll()
 {
 	logprint("_streamer::onConnectedAll start\n");
 	level thread spectating_loop();
-	level thread player_names();
+	// level thread player_names();
 	logprint("_streamer::onConnectedAll end\n");
 }
 
@@ -123,6 +123,9 @@ onSpawnedStreamer()
 
 	if (self.pers["team"] == "streamer")
 	{
+		// calls UpdatePlayerCvars from matchinfo
+		self thread updateStreamerCvars();
+
 		// Open menu
 		self thread openStreamerMenu(); // force menu cursor
 
@@ -1636,4 +1639,32 @@ player_names()
 	}
 
 
+}
+
+updateStreamerCvars()
+{
+	self endon("disconnect");
+
+	currTime = gettime();
+	logprint("_streamer::updateStreamerCvars start & time=" + currTime + "\n");
+
+	wait level.frame;
+
+	for (;;)
+	{
+		// logprint("_streamer::updateStreamerCvars loop iteration start\n");
+
+		// End this thread if player join team
+		if (self.pers["team"] != "streamer")
+		{
+			logprint("_streamer::updateStreamerCvars player left streamer team\n");
+			break;
+		}
+
+		maps\mp\gametypes\_matchinfo::UpdatePlayerCvars();
+
+		wait level.fps_multiplier * 1;
+	}
+
+	logprint("_streamer::updateStreamerCvars end\n");
 }

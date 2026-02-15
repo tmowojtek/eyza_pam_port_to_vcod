@@ -119,7 +119,7 @@ onConnected()
 		if (game["scr_matchinfo"] == 2)
 		{
 			//waittillframeend;
-			wait 0.05;
+			//wait 0.05;
 			// Update team names in scoreboard
 			self updateTeamNames();
 		}
@@ -141,8 +141,8 @@ onJoinedTeam(teamName)
 	}
 	else
 	{
-		if (ingame_isEnabled())
-			ingame_show();
+		// if (ingame_isEnabled())
+		// 	ingame_show();
 	}
 }
 
@@ -211,7 +211,7 @@ ingame_hide()
 
 updateTeamNames()
 {
-	//logprint("_matchinfo::updateTeamNames start\n");
+	// logprint("_matchinfo::updateTeamNames start\n");
 	//println("##updateTeamNames:"+game["match_team1_name"]);
 
 	teamname_allies = game["match_team1_name"];
@@ -242,13 +242,14 @@ updateTeamNames()
 	else
 		self maps\mp\gametypes\global\_global::setClientCvarIfChanged("g_TeamName_Axis", "MPSCRIPT_GERMAN");
 
-	//logprint("_matchinfo::updateTeamNames end\n");
+	// logprint("_matchinfo::updateTeamNames end\n");
 }
 
 
 
 processPreviousMapToHistory()
 {
+	logprint("_matchinfo::processPreviousMapToHistory\n");
 	prevMap_map = getCvar("sv_map_name");
 
 	// If prev map is defined, it means match started and this score needs to be saved
@@ -287,6 +288,7 @@ processPreviousMapToHistory()
 
 refreshTeamNames()
 {
+	// logprint("_matchinfo::refreshTeamNames start\n");
 	// Generate allies and axis team names
 	// Generate team names according to player names
 	wait level.fps_multiplier * 0.2;
@@ -294,6 +296,7 @@ refreshTeamNames()
 	wait level.fps_multiplier * 0.2;
 	maps\mp\gametypes\_teamname::refreshTeamName("axis"); // will update level.teamname_axis
 	wait level.frame;
+	// logprint("_matchinfo::refreshTeamNames end\n");
 }
 
 
@@ -328,6 +331,8 @@ determineTeamByHistoryCvars()
 
 determineTeamByFirstConnected()
 {
+	logprint("_matchinfo::determineTeamByFirstConnected\n");
+
 	refreshTeamNames();
 
 	// Find first team by looking wich player connect
@@ -398,20 +403,25 @@ resetAll()
 	game["match_team2_score"] = "";
 
 	// Generate team names again
-	determineTeamByFirstConnected();
+	//determineTeamByFirstConnected();
 }
 
 waitForPlayerOrClear(playersLast)
 {
+	logprint("_matchinfo::waitForPlayerOrClear(" + playersLast + ") start\n");
 	wait level.fps_multiplier * 15;
 
 	resetCount = 0;
 
 	for(;;)
 	{
+		//logprint("_matchinfo::waitForPlayerOrClear check if teams are set or reset matchinfo in 1min. resetCount="  + resetCount + "\n");
 		// Exit loop if teams are set
 		if (game["match_teams_set"])
+		{
+			logprint("_matchinfo::waitForPlayerOrClear teams are set - loop exit.\n");
 			return;
+		}
 
 		// reset matchinfo if 30% of players disconnect or there are no players or there was no players last map
 		players = getentarray("player", "classname");
@@ -510,8 +520,13 @@ GetMapName(mapname)
 }
 
 
+// must be run as thread [player] UpdatePlayerCvars
 UpdatePlayerCvars()
 {
+	self endon("disconnect");
+
+	logprint("_matchinfo::UpdatePlayerCvars start\n");
+
 	if (game["scr_matchinfo"] > 0)
 	{
 		teamNum_left  = "team1";
@@ -654,6 +669,8 @@ UpdatePlayerCvars()
 		// Play time
 		self maps\mp\gametypes\global\_global::setClientCvarIfChanged("ui_matchinfo_matchtime", "");
 	}
+	
+	logprint("_matchinfo::UpdatePlayerCvars start\n");
 }
 
 
@@ -727,19 +744,23 @@ refresh()
 			// Called in every first readyup on every map
 			if (!game["match_teams_set"])
 			{
-				// If match exists, load teams from cvars. Othervise load team by first connected player
-				if (game["match_exists"])
-					if (isDefined(game["readyup_first_run_ending_for_matchinfo"]) && game["readyup_first_run_ending_for_matchinfo"])
-						determineTeamByHistoryCvars();
-				else
-					if (isDefined(game["readyup_first_run_ending_for_matchinfo"]) && game["readyup_first_run_ending_for_matchinfo"])
-						determineTeamByFirstConnected();
-
-				// for all players change team name in scoreboard
-				players = getentarray("player", "classname");
-				for(i = 0; i < players.size; i++)
+				if (isDefined(game["readyup_first_run_ending_for_matchinfo"]) && game["readyup_first_run_ending_for_matchinfo"])
 				{
-					players[i] updateTeamNames();
+					// If match exists, load teams from cvars. Othervise load team by first connected player
+					if (game["match_exists"])
+					{
+						determineTeamByHistoryCvars();
+					}
+					else
+					{
+						determineTeamByFirstConnected();
+					}
+					// for all players change team name in scoreboard
+					players = getentarray("player", "classname");
+					for(i = 0; i < players.size; i++)
+					{
+						players[i] updateTeamNames();
+					}
 				}
 			}
 
@@ -889,7 +910,8 @@ refresh()
 		else					maps\mp\gametypes\global\_global::setCvarIfChanged("_match_round", "-");
 
 
-		thread UpdateCvarsForPlayers();
+		// now this runs for streamer only and invokation is moved to onSpawnedStreamer in _streamer.gsc
+		// thread UpdateCvarsForPlayers();
 
 
 
