@@ -15,6 +15,10 @@ init()
 
 	if (!isDefined(game["streamerSystem_scoreProgress"]))
 		game["streamerSystem_scoreProgress"] = [];
+	if (!isDefined(game["streamer_killfeed"]))
+		game["streamer_killfeed"] = "";
+	
+	game["streamer_killfeed"] = "";
 
 	game["streamerSystem_playerProgress"] = [];
 
@@ -575,6 +579,9 @@ HUD_PlayerBoxes_Loop()
 			self thread hide_messages();
 			continue;
 		}
+
+		// print current killfeed variable value to streamer
+		self maps\mp\gametypes\global\_global::setClientCvarIfChanged("ui_streamer_killfeed", game["streamer_killfeed"]);
 
 
 		// Player progress

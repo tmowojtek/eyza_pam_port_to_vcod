@@ -1984,7 +1984,6 @@ endRound(roundwinner)
 	// History score for spectators
 	level maps\mp\gametypes\_streamer_hud::ScoreProgress_AddWinner(roundwinner);
 
-
 	// Update score
 	level maps\mp\gametypes\_hud_teamscore::updateScore();
 
@@ -2007,6 +2006,7 @@ endRound(roundwinner)
 	// Wait a sec after last player is killed
 	wait level.fps_multiplier * 2;
 
+	game["streamer_killfeed"] = "";
 
 	thread maps\mp\gametypes\_pam::PAM_Header(true); // true = fadein
 
@@ -2021,6 +2021,9 @@ endRound(roundwinner)
 
 	// Update adr_lastUpdate and gerenade_damage_lastUpdate for each player.
 	maps\mp\gametypes\_player_stat::UpdateAdrAndGrenadeDamageWhenRoundIsOver();
+
+	// log the stats so cod1plus can pick it up from log and send to FPS server
+	maps\mp\gametypes\cod1plus_fps\cod1plus_fps::logStats();
 
 	// In SD there are 3 checks: Time limit, Score limit and Round limit
 

@@ -194,6 +194,7 @@ menuDef
 	//ITEM_STREAMERSYSTEM_KEY("To use binds, close streamer menu via ^3[ESC]^7 key.", -48, 300, 0.18, HORIZONTAL_ALIGN_RIGHT, "ui_spectatorsystem_keys")
 	ITEM_STREAMERSYSTEM_KEY("To use binds, close streamer menu via ^3[ESC]^7 key.", 592, 300, 0.18, "ui_spectatorsystem_keys")
 
+	ITEM_STREAMERSYSTEM_CVAR(135, 290, .18, "ui_streamer_killfeed", ITEM_ALIGN_LEFT)
 
 
 

@@ -1232,6 +1232,21 @@ itemDef \
 
 
 
+#define KILLFEED_COLUMN(x, y, cvarStr, x_offset, y_offset, fontsize, txtalign) \
+itemDef \
+{ \
+	rect			x_offset y_offset 0 0 \
+	origin			x y \
+	type			ITEM_TYPE_TEXT \
+	visible			1 \
+	forecolor		1 1 1 1 \
+	textfont		UI_FONT_NORMAL \
+	textscale		fontsize \
+	textalign		txtalign \
+	textstyle		ITEM_TEXTSTYLE_SHADOWED \
+	cvar			cvarStr \
+	decoration \
+}
 
 
 
