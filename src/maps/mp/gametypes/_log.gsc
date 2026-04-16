@@ -14,6 +14,8 @@ init()
     // level thread onRoundEnd();
 
     // level thread onServerRestart();
+	
+	game["streamer_killfeed"] = "";
 }
 
 onConnected()
@@ -172,6 +174,7 @@ logKill(player, attacker, sWeapon, iDamage, sMeansOfDeath, sHitLoc)
     }
 
     game["streamer_killfeed"] += attack_name + " killed " + self_name + "\n";
+
     logPrint("Kill;"+self_guid+";"+self_num+";"+self_name+";"+self_team+";"+attack_guid+";"+attack_num+";"+attack_name+";"+attack_team+";"+sWeapon+";"+iDamage+";"+sMeansOfDeath+";"+sHitLoc+"\n");
 }
 

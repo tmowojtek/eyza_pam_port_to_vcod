@@ -15,10 +15,6 @@ init()
 
 	if (!isDefined(game["streamerSystem_scoreProgress"]))
 		game["streamerSystem_scoreProgress"] = [];
-	if (!isDefined(game["streamer_killfeed"]))
-		game["streamer_killfeed"] = "";
-	
-	game["streamer_killfeed"] = "";
 
 	game["streamerSystem_playerProgress"] = [];
 
